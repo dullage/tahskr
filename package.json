@@ -1,0 +1,23 @@
+{
+  "name": "tahskr",
+  "version": "19.9.26",
+  "description": "A mobile responsive website and electron app to manage to-dos.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dullage/tahskr.git"
+  },
+  "author": "Adam Dullage",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dullage/tahskr/issues"
+  },
+  "homepage": "https://github.com/Dullage/tahskr#readme",
+  "dependencies": {
+    "electron": "^6.0.10"
+  }
+}
