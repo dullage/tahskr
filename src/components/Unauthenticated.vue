@@ -1,12 +1,12 @@
 <template>
   <div id="outer-container">
     <div id="inner-container">
-      <div id="title">tahskr</div>
-      <div id="subtitle">[noun] yet another todo app</div>
+      <span id="title">tahskr</span>
+      <span>[task-er]</span>
+      <div id="subtitle">(noun) yet another todo app</div>
 
       <div id="login-form">
         <form @submit.prevent="submit()">
-          <!-- <label for="email">Email Address</label> -->
           <input
             type="email"
             id="email"
@@ -14,15 +14,11 @@
             placeholder="Email Address"
             required
           />
-
-          <!-- <label for="password">Password</label> -->
           <input type="password" id="password" v-model="password" placeholder="Password" required />
+          <input type="checkbox" id="remember" v-model="remember" />
+          <label for="remember">Remember Me</label>
 
-          <div id="buttons">
-            <div>
-              <input type="checkbox" id="remember" v-model="remember" />
-              <label for="remember">Remember Me</label>
-            </div>
+          <div id="submit-button">
             <button type="submit">
               <login-variant-icon />Log In
             </button>
@@ -86,7 +82,6 @@ export default {
 
 #outer-container {
   height: 100%;
-  // width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -97,6 +92,9 @@ export default {
 #inner-container {
   padding: 40px 30px;
   border: 1px solid $offWhite;
+  @media #{$mobile} {
+    border: none;
+  }
 }
 
 #title {
@@ -121,18 +119,16 @@ input[type="password"] {
   color: $offWhite;
 }
 
-#buttons {
-  padding: 0 2px;
+#submit-button {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
 }
 
 button {
   border: none;
   background: none;
   color: $offWhite;
-  font-size: 16px;
+  font-size: 18px;
   cursor: pointer;
 }
 </style>

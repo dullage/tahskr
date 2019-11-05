@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css?family=Lato|Lora+Display&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Lato|Lora+Display&display=swap");
 
 $bgColor: #1d1d22;
 $bgLightColor: #2b2b39;
 $offWhite: #eaeefc;
 $disabledColor: #636384;
-$brandFontStack: 'Lora', serif;
+$brandFontStack: "Lora", serif;
+$mobile: "only screen and (max-width: 600px)";
 
 * {
   font-family: "Lato", sans-serif;
