@@ -1,5 +1,5 @@
 <template>
-  <div class=".fullscreen">
+  <div id="app">
     <communication-error v-if="communicationError == true" />
     <authenticated v-else-if="loggedIn" :auth="auth" />
     <unauthenticated v-else @update-token="updateAuth" />
@@ -40,13 +40,14 @@ export default {
 
   methods: {
     updateAuth: function(token, remember) {
+      console.log(token)
       this.auth.token = token.token;
       this.auth.userId = token.userId;
       if (remember == true) {
         Cookies.set("token", token.token, { expires: 30 });
         Cookies.set("userId", token.userId, { expires: 30 });
       }
-      api.defaults.headers.common["token"] = token.token;
+      api.defaults.headers.common["x-token"] = token.token;
     }
   },
 
@@ -58,7 +59,7 @@ export default {
     if (cookieToken && cookieUserId) {
       this.auth.token = cookieToken;
       this.auth.userId = cookieUserId;
-      api.defaults.headers.common["token"] = cookieToken;
+      api.defaults.headers.common["x-token"] = cookieToken;
     }
 
     EventBus.$on("logout", function() {
@@ -66,7 +67,7 @@ export default {
       Cookies.remove("userId");
       parent.auth.token = null;
       parent.auth.userId = null;
-      delete api.defaults.headers.common["token"];
+      delete api.defaults.headers.common["x-token"];
     });
 
     EventBus.$on("communication-error", function() {
@@ -75,3 +76,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+#app {
+  max-width: 1024px;
+  flex: 1 1 auto;
+}
+</style>

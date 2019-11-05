@@ -1,7 +1,7 @@
-import Vue from "vue";
-
+import "./main.scss";
+import "vue-material-design-icons/styles.css";
 import App from "./components/App.vue";
-import "./stylesheet.css";
+import Vue from "vue";
 
 var app = new Vue({
   el: "#app",

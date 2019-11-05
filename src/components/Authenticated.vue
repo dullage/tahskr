@@ -1,18 +1,36 @@
 <template>
-  <div>
-    <add-todo :auth="auth" @add-todo="addTodo"></add-todo>
+  <div id="container">
+    <div id="list-view">
+      <p v-if="loading == true" style="color: white;">Loading...</p>
 
-    <br />
+      <draggable v-else :list="db" @end="newTodoListOrder" handle=".drag-handle">
+        <TodoList
+          v-for="(list, index) in db"
+          :listIndex="index"
+          :id="list.id"
+          :name="list.name"
+          :show-completed="showCompleted"
+          :key="list.id"
+        />
+      </draggable>
 
-    <draggable :list="db" @end="newTodoListOrder" invert-swap="true">
-      <TodoList v-for="(list, index) in db" :listIndex="index" :key="list.id" />
-    </draggable>
+      <add-todo :auth="auth" @add-todo="addTodo"></add-todo>
+      <br />
 
-    <br />
+      <button @click="refreshAll">Refresh</button>
+      <button @click="logout">Log Out</button>
+      <button @click="showCompleted = !showCompleted">Toggle Completed</button>
+      <button @click="sortListByIndex(1)">Test</button>
+      <!-- <button @click="testMobile = !testMobile">Toggle Desktop / Mobile</button>
+      <button @click="testOpen = !testOpen">Toggle Open / Close</button>-->
+    </div>
 
-    <button @click="refreshAll">Refresh</button>
-    <button @click="logout">Log Out</button>
-    <button @click="showCompleted = !showCompleted">Toggle Completed</button>
+    <!-- <div
+      id="detail-view"
+      :class="{ desktop: testDesktop, mobile: testMobile, open: testOpen, closed: testClosed }"
+    >
+      <p v-show="testOpen == true" @click="testOpen = !testOpen">Close</p>
+    </div>-->
   </div>
 </template>
 
@@ -33,7 +51,7 @@ export default {
   },
 
   props: {
-    auth: Object
+    auth: { type: Object, required: true }
   },
 
   data: function() {
@@ -43,13 +61,26 @@ export default {
       stagedTodos: null,
       loading: true,
       db: [],
-      showCompleted: false
+      showCompleted: false,
+      testMobile: false,
+      testOpen: false
     };
   },
 
+  computed: {
+    testDesktop: function() {
+      return !this.testMobile;
+    },
+    testClosed: function() {
+      return !this.testOpen;
+    }
+  },
+
   watch: {
-    showCompleted: function() {
-      this.refreshAll();
+    showCompleted: function(newValue) {
+      if (newValue == true) {
+        this.refreshAll();
+      }
     }
   },
 
@@ -66,23 +97,28 @@ export default {
     getTodoLists: function() {
       var parent = this;
       api.get("/api/todolist").then(function(r) {
-        parent.stagedTodoLists = r.data.slice();
+        parent.stagedTodoLists = r.data;
         parent.dataLoadedCheck();
       });
     },
 
     getTodos: function() {
       var parent = this;
-      var completedOption = null;
+      var completedOption = false;
 
-      if (this.showCompleted == false) {
-        this.completedOption = false;
+      if (this.showCompleted == true) {
+        completedOption = null;
       }
 
       api
-        .get("/api/todo", { headers: { completed: completedOption } })
+        .get("/api/todo", { params: { completed: completedOption } })
         .then(function(r) {
-          parent.stagedTodos = r.data.slice();
+          r.data.forEach(function(todo) {
+            if (todo.completedDatetime != null) {
+              todo.completedDatetime = new Date(todo.completedDatetime);
+            }
+          });
+          parent.stagedTodos = r.data;
           parent.dataLoadedCheck();
         });
     },
@@ -112,10 +148,10 @@ export default {
       this.stagedTodoLists.push({ id: 0, name: "Inbox", todos: [] });
 
       // Order todos
-      this.order(this.stagedTodos, this.user.config.todoOrder);
+      this.sort(this.stagedTodos, this.user.config.todoOrder);
 
       // Order todo lists
-      this.order(this.stagedTodoLists, this.user.config.todoListOrder);
+      this.sort(this.stagedTodoLists, this.user.config.todoListOrder);
 
       // Add user lists
       this.stagedTodoLists.forEach(function(value) {
@@ -145,10 +181,56 @@ export default {
       });
     },
 
-    order: function(toSort, order) {
+    todoIndexById: function(targetId) {
+      for (var [listIndex, list] of Object.entries(this.db)) {
+        for (var [todoIndex, todo] of Object.entries(list.todos)) {
+          if (todo.id == targetId) {
+            return [listIndex, todoIndex];
+          }
+        }
+      }
+    },
+
+    sort: function(toSort, order) {
       toSort.sort(function(a, b) {
-        return order.indexOf(a.id) - order.indexOf(b.id);
+        // Order incomplete by user config
+        if (a.completedDatetime == null && b.completedDatetime == null) {
+          let aIndex = order.indexOf(a.id);
+          let bIndex = order.indexOf(b.id);
+          // Both ordered
+          if (aIndex > -1 && bIndex > -1) {
+            return a - b;
+          }
+          // Neither ordered
+          if (aIndex == -1 && bIndex == -1) {
+            return 0;
+          }
+          // One ordered - Prioritise ordered over unordered
+          else {
+            if (aIndex == -1) {
+              return 1;
+            } else {
+              return -1;
+            }
+          }
+        }
+        // Order complete by completedDatetime DESC
+        else if (a.completedDatetime != null && b.completedDatetime != null) {
+          return b.completedDatetime - a.completedDatetime;
+        }
+        // Order incomplete above complete
+        else {
+          if (a.completedDatetime == null) {
+            return -1;
+          } else {
+            return 1;
+          }
+        }
       });
+    },
+
+    sortListByIndex: function(listIndex) {
+      this.sort(this.db[listIndex].todos, this.user.config.todoOrder);
     },
 
     getTodoListOrder: function() {
@@ -163,7 +245,9 @@ export default {
       var order = [];
       this.db.forEach(function(list) {
         list.todos.forEach(function(todo) {
-          order.push(todo.id);
+          if (todo.completedDatetime == null) {
+            order.push(todo.id);
+          }
         });
       });
       return order;
@@ -192,17 +276,66 @@ export default {
 
     logout: function() {
       EventBus.$emit("logout");
+    },
+
+    updateTodoByIndex: function(listIndex, todoIndex, updates) {
+      var todo = this.db[listIndex].todos[todoIndex];
+      Object.assign(todo, updates);
+      api.patch(`/api/todo/${todo.id}`, updates);
+      this.sortListByIndex(listIndex);
+    },
+
+    updateTodoById: function(id, updates) {
+      var [listIndex, todoIndex] = this.todoIndexById(id);
+      this.updateTodoByIndex(listIndex, todoIndex, updates);
     }
   },
 
   created: function() {
     EventBus.$on("new-todo-order", this.newTodoOrder);
+    EventBus.$on("update-todo-by-id", this.updateTodoById);
+    EventBus.$on("update-todo-by-index", this.updateTodoByIndex);
     this.refreshAll();
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+#container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+#list-view {
+  flex: 1 1 auto;
+  padding: 8px;
+}
+
+#detail-view {
+  background-color: lightgray;
+  &.desktop {
+    width: 400px;
+    flex: 0 0 auto;
+  }
+  &.mobile {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    transition: width 2s;
+    &.open {
+      width: 1024px;
+      transition: width 2s;
+    }
+    &.closed {
+      width: 0px;
+      transition: width 2s;
+    }
+  }
+}
+
 p {
   border: 1px solid grey;
   padding: 4px;
