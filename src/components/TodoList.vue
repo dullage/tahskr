@@ -1,8 +1,8 @@
 <template>
   <div class="list">
-    <div class="list-title">
+    <div class="list-title drag-handle">
       <span>
-        <drag-icon class="drag-handle" />
+        <drag-icon  />
         {{ name }}
       </span>
     </div>

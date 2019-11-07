@@ -1,7 +1,8 @@
 <template>
   <div>
-    <input type="text" @keyup.enter="submit" v-model="summary" />
-    <button type="button" @click="submit">Add</button>
+    <input type="text" @keyup.enter="submit" v-model="summary" placeholder="You can just start typing here..."/>
+    <!-- <br /> -->
+    <!-- <button type="button" @click="submit">Add</button> -->
   </div>
 </template>
 
@@ -45,3 +46,25 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+@import "../common";
+
+input {
+  font-size: 17px;
+  width: 100%;
+  padding: 10px 16px;
+  border: 12px solid $bgLightColor;
+  background-color: $bgColor;
+  color: $offWhite;
+  &::placeholder {
+    color: $disabledColor;
+  }
+  &:focus {
+    outline: none;
+    &::placeholder {
+      color: transparent;
+    }
+  }
+}
+</style>

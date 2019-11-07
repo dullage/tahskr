@@ -20,7 +20,6 @@
       <button @click="refreshAll">Refresh</button>
       <button @click="logout">Log Out</button>
       <button @click="showCompleted = !showCompleted">Toggle Completed</button>
-      <button @click="sortListByIndex(1)">Test</button>
       <!-- <button @click="testMobile = !testMobile">Toggle Desktop / Mobile</button>
       <button @click="testOpen = !testOpen">Toggle Open / Close</button>-->
     </div>
@@ -148,10 +147,10 @@ export default {
       this.stagedTodoLists.push({ id: 0, name: "Inbox", todos: [] });
 
       // Order todos
-      this.sort(this.stagedTodos, this.user.config.todoOrder);
+      this.sortTodos(this.stagedTodos, this.user.config.todoOrder);
 
       // Order todo lists
-      this.sort(this.stagedTodoLists, this.user.config.todoListOrder);
+      this.sortTodoLists(this.stagedTodoLists, this.user.config.todoListOrder);
 
       // Add user lists
       this.stagedTodoLists.forEach(function(value) {
@@ -191,15 +190,39 @@ export default {
       }
     },
 
-    sort: function(toSort, order) {
+    sortTodoLists: function(toSort, order) {
       toSort.sort(function(a, b) {
+        let aIndex = order.indexOf(a.id);
+        let bIndex = order.indexOf(b.id);
+        // Both ordered
+        if (aIndex > -1 && bIndex > -1) {
+          return aIndex - bIndex;
+        }
+        // Neither ordered
+        if (aIndex == -1 && bIndex == -1) {
+          return 0;
+        }
+        // One ordered - Prioritise ordered over unordered
+        else {
+          if (aIndex == -1) {
+            return 1;
+          } else {
+            return -1;
+          }
+        }
+      });
+    },
+
+    sortTodos: function(toSort, order) {
+      toSort.sort(function(a, b) {
+        // TODO: This is a duplication of the above.
         // Order incomplete by user config
         if (a.completedDatetime == null && b.completedDatetime == null) {
           let aIndex = order.indexOf(a.id);
           let bIndex = order.indexOf(b.id);
           // Both ordered
           if (aIndex > -1 && bIndex > -1) {
-            return a - b;
+            return aIndex - bIndex;
           }
           // Neither ordered
           if (aIndex == -1 && bIndex == -1) {
@@ -230,7 +253,7 @@ export default {
     },
 
     sortListByIndex: function(listIndex) {
-      this.sort(this.db[listIndex].todos, this.user.config.todoOrder);
+      this.sortTodos(this.db[listIndex].todos, this.user.config.todoOrder);
     },
 
     getTodoListOrder: function() {
@@ -334,16 +357,5 @@ export default {
       transition: width 2s;
     }
   }
-}
-
-p {
-  border: 1px solid grey;
-  padding: 4px;
-  margin: 4px;
-  cursor: grab;
-}
-
-h2 {
-  cursor: grab;
 }
 </style>
