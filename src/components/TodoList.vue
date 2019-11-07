@@ -1,7 +1,10 @@
 <template>
   <div class="list">
     <div class="list-title">
-      <span class="drag-handle">{{ name | uppercase }}</span>
+      <span>
+        <drag-icon class="drag-handle" />
+        {{ name }}
+      </span>
     </div>
 
     <draggable
@@ -28,6 +31,7 @@
 
 <script>
 import api from "../api";
+import DragIcon from "icons/Drag.vue";
 import draggable from "vuedraggable";
 import EventBus from "../eventBus.js";
 import Todo from "./Todo.vue";
@@ -35,7 +39,8 @@ import Todo from "./Todo.vue";
 export default {
   components: {
     draggable,
-    Todo
+    Todo,
+    DragIcon
   },
 
   props: {
@@ -78,19 +83,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../main";
+@import "../common";
 
 .list {
   margin: 0 0 40px 0;
 }
 
 .list-title {
-  margin: 16px 0;
-  span {
-    padding: 6px;
-    background-color: $bgLightColor;
-    color: $offWhite;
-    cursor: move;
-  }
+  display: inline-block;
+  padding: 6px 10px 6px 6px;
+  background-color: $bgLightColor;
+  color: $offWhite;
+  text-transform: uppercase;
+}
+
+.drag-handle {
+  cursor: move;
 }
 </style>

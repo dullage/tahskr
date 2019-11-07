@@ -1,33 +1,18 @@
 <template>
   <div :class="{ complete: completed, incomplete: !completed }" class="todo">
-    <div class="checkbox" @click="toggleCompleted">
-      <check-bold-icon class="check-box-icon" />
-    </div>
-
+    <check-box class="check-box" :checked="completed" @toggled="toggleCompleted" />
     <span class="summary">{{ summary }}</span>
-
-    <!-- <span @click="toggleCompleted">
-      Completed:
-      <span v-show="completed">Yes</span>
-      <span v-show="!completed">No</span>
-    </span>-->
-
-    <!-- <span @click="toggleImportant">
-      Important:
-      <span v-show="important">Yes</span>
-      <span v-show="!important">No</span>
-    </span>-->
   </div>
 </template>
 
 <script>
 import api from "../api";
-import CheckBoldIcon from "icons/CheckBold.vue";
+import CheckBox from "./CheckBox.vue";
 import EventBus from "../eventBus.js";
 
 export default {
   components: {
-    CheckBoldIcon
+    CheckBox
   },
 
   props: {
@@ -70,7 +55,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../main";
+@import "../common";
 
 .todo {
   height: 36px;
@@ -83,42 +68,14 @@ export default {
   font-size: 17px;
 }
 
-.checkbox {
-  height: 16px;
-  width: 16px;
+.check-box {
   margin: 10px;
-  background-color: white;
-  cursor: pointer;
-  color: $bgColor;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-}
-
-.check-box-icon {
-  margin: 0 0 3px 0;
 }
 
 .complete {
-  .checkbox {
-    background-color: $disabledColor;
-  }
   .summary {
     text-decoration: line-through;
     color: $disabledColor;
-  }
-}
-
-.incomplete {
-  .check-box-icon {
-    display: none;
-  }
-  .checkbox:hover {
-    .check-box-icon {
-      display: block;
-      opacity: 50%;
-    }
   }
 }
 </style>

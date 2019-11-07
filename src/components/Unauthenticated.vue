@@ -15,8 +15,15 @@
             required
           />
           <input type="password" id="password" v-model="password" placeholder="Password" required />
-          <input type="checkbox" id="remember" v-model="remember" />
-          <label for="remember">Remember Me</label>
+          <div id="remember-me">
+            <check-box
+              class="check-box"
+              :checked="remember"
+              :dimWhenChecked="false"
+              @toggled="toggleRemember"
+            />
+            <span @click="toggleRemember">Remember Me</span>
+          </div>
 
           <div id="submit-button">
             <button type="submit">
@@ -24,7 +31,7 @@
             </button>
           </div>
         </form>
-        <p>{{ message }}</p>
+        <p id="message">{{ message }}</p>
       </div>
     </div>
   </div>
@@ -33,23 +40,29 @@
 <script>
 import axios from "axios";
 import api from "../api";
+import CheckBox from "./CheckBox.vue";
 import LoginVariantIcon from "icons/LoginVariant.vue";
 
 export default {
   components: {
-    LoginVariantIcon
+    LoginVariantIcon,
+    CheckBox
   },
 
   data: function() {
     return {
-      emailAddress: "adam@dullage.com",
-      password: "password",
+      emailAddress: null,
+      password: null,
       remember: false,
       message: null
     };
   },
 
   methods: {
+    toggleRemember: function() {
+      this.remember = !this.remember;
+    },
+
     submit: function() {
       var parent = this;
 
@@ -69,7 +82,6 @@ export default {
           }
         })
         .finally(function() {
-          parent.emailAddress = null;
           parent.password = null;
         });
     }
@@ -78,7 +90,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../main";
+@import "../common";
 
 #outer-container {
   height: 100%;
@@ -119,9 +131,22 @@ input[type="password"] {
   color: $offWhite;
 }
 
+#remember-me {
+  display: flex;
+  align-items: center;
+  span {
+    cursor: pointer;
+  }
+}
+
+.check-box {
+  margin: 0 4px 0 0;
+}
+
 #submit-button {
   display: flex;
   justify-content: flex-end;
+  margin: 12px 0;
 }
 
 button {
@@ -130,5 +155,12 @@ button {
   color: $offWhite;
   font-size: 18px;
   cursor: pointer;
+}
+
+#message {
+  width: 300px;
+  color: $errorRed;
+  font-size: 12px;
+  text-align: center;
 }
 </style>

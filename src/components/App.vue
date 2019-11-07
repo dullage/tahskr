@@ -40,7 +40,6 @@ export default {
 
   methods: {
     updateAuth: function(token, remember) {
-      console.log(token)
       this.auth.token = token.token;
       this.auth.userId = token.userId;
       if (remember == true) {

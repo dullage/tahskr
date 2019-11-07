@@ -1,4 +1,4 @@
-import "./main.scss";
+import "./global.scss";
 import "vue-material-design-icons/styles.css";
 import App from "./components/App.vue";
 import Vue from "vue";
