@@ -35,12 +35,12 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../common";
 
 .checkbox {
-  height: 16px;
-  width: 16px;
+  height: 12px;
+  width: 12px;
   cursor: pointer;
   background-color: white;
   color: $bgColor;

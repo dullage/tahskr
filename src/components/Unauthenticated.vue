@@ -1,9 +1,7 @@
 <template>
   <div id="outer-container">
     <div id="inner-container">
-      <span id="title">tahskr</span>
-      <span>[task-er]</span>
-      <div id="subtitle">(noun) yet another todo app</div>
+      <logo />
 
       <div id="login-form">
         <form @submit.prevent="submit()">
@@ -42,11 +40,13 @@ import axios from "axios";
 import api from "../api";
 import CheckBox from "./CheckBox.vue";
 import LoginVariantIcon from "icons/LoginVariant.vue";
+import Logo from "./Logo.vue"
 
 export default {
   components: {
     LoginVariantIcon,
-    CheckBox
+    CheckBox,
+    Logo
   },
 
   data: function() {
@@ -109,14 +109,8 @@ export default {
   }
 }
 
-#title {
-  font-family: $brandFontStack;
-  font-size: 40px;
-}
-
-#subtitle {
+.logo {
   margin: 0 0 50px 0;
-  font-style: italic;
 }
 
 input[type="email"],
@@ -129,6 +123,15 @@ input[type="password"] {
   height: 40px;
   background-color: $bgLightColor;
   color: $offWhite;
+  &::placeholder {
+    color: $disabledColor;
+  }
+  &:focus {
+    outline: none;
+    &::placeholder {
+      color: transparent;
+    }
+  }
 }
 
 #remember-me {

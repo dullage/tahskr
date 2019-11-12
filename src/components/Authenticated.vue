@@ -1,9 +1,37 @@
 <template>
-  <div id="container">
-    <div id="list-view">
-      <p v-if="loading == true" style="color: white;">Loading...</p>
+  <div id="container" @click="closeMenu">
+    <div id="left-column">
+      <div id="top-bar">
+        <div @click.stop="menuOpen = !menuOpen">
+          <menu-icon />
+        </div>
+        <logo :showIcon="true" :showPhonetic="false" :showSubtitle="false" />
+      </div>
 
-      <draggable v-else :list="db" @end="newTodoListOrder" handle=".drag-handle">
+      <div id="menu" :class="{open: menuOpen}">
+        <div class="button" @click="showCompleted = !showCompleted">
+          <toggle-switch-off-outline-icon v-if="showCompleted == false" />
+          <toggle-switch-outline-icon v-else />
+          <span>Show Completed</span>
+        </div>
+        <div class="button" @click="refreshAll">
+          <refresh-icon />
+          <span>Refresh</span>
+        </div>
+        <div class="button" @click="logout">
+          <logout-variant-icon />
+          <span>Logout</span>
+        </div>
+        <!-- <button @click="refreshAll">Refresh</button>
+        <button @click="logout">Log Out</button>
+        <button @click="showCompleted = !showCompleted">Toggle Completed</button>-->
+        <!-- <button @click="testMobile = !testMobile">Toggle Desktop / Mobile</button>
+        <button @click="testOpen = !testOpen">Toggle Open / Close</button>-->
+      </div>
+
+      <p v-if="loading" style="color: white;">Loading...</p>
+
+      <draggable v-else id="list-view" :list="db" @end="newTodoListOrder" handle=".drag-handle">
         <TodoList
           v-for="(list, index) in db"
           :listIndex="index"
@@ -15,17 +43,10 @@
       </draggable>
 
       <add-todo :auth="auth" @add-todo="addTodo"></add-todo>
-      <br />
-
-      <button @click="refreshAll">Refresh</button>
-      <button @click="logout">Log Out</button>
-      <button @click="showCompleted = !showCompleted">Toggle Completed</button>
-      <!-- <button @click="testMobile = !testMobile">Toggle Desktop / Mobile</button>
-      <button @click="testOpen = !testOpen">Toggle Open / Close</button>-->
     </div>
 
     <!-- <div
-      id="detail-view"
+      id="right-column"
       :class="{ desktop: testDesktop, mobile: testMobile, open: testOpen, closed: testClosed }"
     >
       <p v-show="testOpen == true" @click="testOpen = !testOpen">Close</p>
@@ -41,12 +62,24 @@ import EventBus from "../eventBus";
 import AddTodo from "./AddTodo.vue";
 import TodoList from "./TodoList.vue";
 import configSchema from "../configSchema";
+import Logo from "./Logo.vue";
+import MenuIcon from "icons/Menu.vue";
+import RefreshIcon from "icons/Refresh.vue";
+import LogoutVariantIcon from "icons/LogoutVariant.vue";
+import ToggleSwitchOutlineIcon from "icons/ToggleSwitchOutline.vue";
+import ToggleSwitchOffOutlineIcon from "icons/ToggleSwitchOffOutline.vue";
 
 export default {
   components: {
     AddTodo,
     draggable,
-    TodoList
+    TodoList,
+    Logo,
+    MenuIcon,
+    RefreshIcon,
+    LogoutVariantIcon,
+    ToggleSwitchOutlineIcon,
+    ToggleSwitchOffOutlineIcon
   },
 
   props: {
@@ -61,6 +94,7 @@ export default {
       loading: true,
       db: [],
       showCompleted: false,
+      menuOpen: false,
       testMobile: false,
       testOpen: false
     };
@@ -84,6 +118,12 @@ export default {
   },
 
   methods: {
+    closeMenu: function() {
+      if (this.menuOpen == true) {
+        this.menuOpen = false;
+      }
+    },
+
     getUser: function() {
       var parent = this;
       api.get(`/api/user/${this.auth.userId}`).then(function(r) {
@@ -324,6 +364,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../common";
+
 #container {
   width: 100%;
   height: 100%;
@@ -332,12 +374,58 @@ export default {
   position: relative;
 }
 
-#list-view {
-  flex: 1 1 auto;
-  padding: 8px;
+#top-bar {
+  margin: 0 0 20px 0;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  .menu-icon {
+    margin: 0 18px 0 6px;
+    font-size: 24px;
+    color: $offWhite;
+    cursor: pointer;
+  }
 }
 
-#detail-view {
+#menu {
+  z-index: 1;
+  margin: 3px;
+  height: 0px;
+  transition: height 300ms;
+  position: absolute;
+  top: 50px;
+  left: 8px;
+  background-color: $bgColor;
+  overflow: hidden;
+  &.open {
+    margin: 0;
+    height: 114px;
+    border: 3px solid $bgLightColor;
+  }
+  .button {
+    cursor: pointer;
+    font-size: 18px;
+    margin: 10px;
+    color: $offWhite;
+  }
+}
+
+#left-column {
+  flex: 1 1 auto;
+
+  // Space for the AddTodo component
+  &::after {
+    content: "";
+    height: 16px;
+    display: block;
+  }
+}
+
+#list-view {
+  padding: 0 4px;
+}
+
+#right-column {
   background-color: lightgray;
   &.desktop {
     width: 400px;

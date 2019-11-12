@@ -1,6 +1,12 @@
 <template>
-  <div>
-    <input type="text" @keyup.enter="submit" v-model="summary" placeholder="You can just start typing here..."/>
+  <div class="add-todo">
+    <hr />
+    <input
+      type="text"
+      @keyup.enter="submit"
+      v-model="summary"
+      placeholder="Add to Inbox..."
+    />
     <!-- <br /> -->
     <!-- <button type="button" @click="submit">Add</button> -->
   </div>
@@ -50,11 +56,22 @@ export default {
 <style lang="scss" scoped>
 @import "../common";
 
+.add-todo,
+input {
+  width: 100%;
+  max-width: 1024px;
+}
+
+.add-todo {
+  position: fixed;
+  bottom: 0;
+}
+
 input {
   font-size: 17px;
-  width: 100%;
-  padding: 10px 16px;
-  border: 12px solid $bgLightColor;
+  padding: 12px 16px;
+  // border: 6px solid $bgLightColor;
+  border: none;
   background-color: $bgColor;
   color: $offWhite;
   &::placeholder {
@@ -66,5 +83,9 @@ input {
       color: transparent;
     }
   }
+}
+
+hr {
+  border: 2px solid $bgLightColor;
 }
 </style>

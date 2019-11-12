@@ -1,7 +1,14 @@
 <template>
-  <div :class="{ complete: completed, incomplete: !completed }" class="todo">
-    <check-box class="check-box" :checked="completed" @toggled="toggleCompleted" />
-    <span class="summary">{{ summary }}</span>
+  <div :class="{ complete: completed, incomplete: !completed, important: important }" class="todo">
+    <div id="left">
+      <check-box class="check-box" :checked="completed" @toggled="toggleCompleted" />
+      <span class="summary">{{ summary }}</span>
+    </div>
+    <div id="right">
+      <div class="important-button" @click="toggleImportant">
+        <span>!</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -59,23 +66,42 @@ export default {
 
 .todo {
   height: 36px;
-  margin: 8px 0;
+  margin: 0 0 4px 0;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   cursor: grab;
   background-color: $bgLightColor;
   color: $offWhite;
   font-size: 17px;
+  div {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .check-box {
   margin: 10px;
 }
 
+.important-button {
+  width: 16px;
+  text-align: center;
+  float: right;
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .complete {
   .summary {
     text-decoration: line-through;
     color: $disabledColor;
+  }
+}
+
+.important {
+  .important-button {
+    color: red;
   }
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="list">
     <div class="list-title drag-handle">
       <span>
-        <drag-icon  />
+        <drag-icon />
         {{ name }}
       </span>
     </div>
@@ -90,6 +90,7 @@ export default {
 }
 
 .list-title {
+  margin: 0 0 4px 0;
   display: inline-block;
   padding: 6px 10px 6px 6px;
   background-color: $bgLightColor;
