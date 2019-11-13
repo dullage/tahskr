@@ -124,7 +124,7 @@ input[type="password"] {
   background-color: $bgLightColor;
   color: $offWhite;
   &::placeholder {
-    color: $disabledColor;
+    color: $subduedColor;
   }
   &:focus {
     outline: none;

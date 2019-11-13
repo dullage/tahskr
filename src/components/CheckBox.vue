@@ -49,7 +49,7 @@ export default {
   align-items: center;
   font-size: 12px;
   &.dim {
-    background-color: $disabledColor;
+    background-color: $subduedColor;
   }
 }
 

@@ -75,7 +75,7 @@ input {
   background-color: $bgColor;
   color: $offWhite;
   &::placeholder {
-    color: $disabledColor;
+    color: $subduedColor;
   }
   &:focus {
     outline: none;

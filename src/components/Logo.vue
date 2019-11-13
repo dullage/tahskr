@@ -42,7 +42,7 @@ export default {
 .checkbox-multiple-marked-outline-icon {
   margin: 0 4px 1px 0;
   font-size: 28px;
-  color: #fbdd87;
+  color: $brandOrange;
 }
 
 .title {
