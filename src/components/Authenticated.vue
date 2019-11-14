@@ -2,47 +2,46 @@
   <div id="container" @click="closeMenu">
     <div id="left-column">
       <div id="top-bar">
-        <div @click.stop="menuOpen = !menuOpen">
-          <menu-icon />
-        </div>
         <logo :showIcon="true" :showPhonetic="false" :showSubtitle="false" />
       </div>
 
-      <div id="menu" :class="{open: menuOpen}">
-        <div class="button" @click="showCompleted = !showCompleted">
-          <toggle-switch-off-outline-icon v-if="showCompleted == false" />
-          <toggle-switch-outline-icon v-else />
-          <span>Show Completed</span>
-        </div>
-        <div class="button" @click="refreshAll">
-          <refresh-icon />
-          <span>Refresh</span>
-        </div>
-        <div class="button" @click="logout">
-          <logout-variant-icon />
-          <span>Logout</span>
-        </div>
-        <!-- <button @click="refreshAll">Refresh</button>
-        <button @click="logout">Log Out</button>
-        <button @click="showCompleted = !showCompleted">Toggle Completed</button>-->
-        <!-- <button @click="testMobile = !testMobile">Toggle Desktop / Mobile</button>
-        <button @click="testOpen = !testOpen">Toggle Open / Close</button>-->
+      <div id="content-area">
+        <div v-if="loading" class="loader">Loading...</div>
+
+        <draggable v-else id="list-view" :list="db" @end="newTodoListOrder" handle=".drag-handle">
+          <TodoList
+            v-for="(list, index) in db"
+            :listIndex="index"
+            :id="list.id"
+            :name="list.name"
+            :show-completed="showCompleted"
+            :key="list.id"
+          />
+        </draggable>
       </div>
 
-      <p v-if="loading" style="color: white;">Loading...</p>
+      <div id="bottom-bar">
+        <div id="menu" :class="{open: menuOpen}">
+          <div class="button" @click="showCompleted = !showCompleted">
+            <toggle-switch-off-outline-icon v-if="showCompleted == false" />
+            <toggle-switch-outline-icon v-else />
+            <span>Show Completed</span>
+          </div>
+          <div class="button" @click="refreshAll">
+            <refresh-icon />
+            <span>Refresh</span>
+          </div>
+          <div class="button" @click="logout">
+            <logout-variant-icon />
+            <span>Logout</span>
+          </div>
+        </div>
 
-      <draggable v-else id="list-view" :list="db" @end="newTodoListOrder" handle=".drag-handle">
-        <TodoList
-          v-for="(list, index) in db"
-          :listIndex="index"
-          :id="list.id"
-          :name="list.name"
-          :show-completed="showCompleted"
-          :key="list.id"
-        />
-      </draggable>
-
-      <add-todo :auth="auth" @add-todo="addTodo"></add-todo>
+        <div @click.stop="menuOpen = !menuOpen">
+          <menu-icon />
+        </div>
+        <add-todo :auth="auth" @add-todo="addTodo"></add-todo>
+      </div>
     </div>
 
     <!-- <div
@@ -379,8 +378,105 @@ export default {
   padding: 0 4px;
   display: flex;
   align-items: center;
+  @media #{$mobile} {
+    justify-content: center;
+  }
+}
+
+#left-column {
+  flex: 1 1 auto;
+
+  // Space for the bottom bar
+  &::after {
+    content: "";
+    height: 12px;
+    display: block;
+  }
+}
+
+#content-area {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.loader,
+.loader:before,
+.loader:after {
+  background: $subduedColor;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+.loader {
+  color: $subduedColor;
+  text-indent: -9999em;
+  margin: 33% auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.loader:before,
+.loader:after {
+  position: absolute;
+  top: 0;
+  content: "";
+}
+.loader:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader:after {
+  left: 1.5em;
+}
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+
+#list-view {
+  flex: 1 1 auto;
+  padding: 0 4px;
+}
+
+#bottom-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: $appWidth;
+  border-top: 2px solid $bgLightColor;
+  background-color: $bgColor;
+  display: flex;
+  align-items: center;
   .menu-icon {
-    margin: 0 18px 0 6px;
+    margin: 0 12px;
     font-size: 24px;
     color: $offWhite;
     cursor: pointer;
@@ -393,8 +489,8 @@ export default {
   height: 0px;
   transition: height 300ms;
   position: absolute;
-  top: 50px;
-  left: 8px;
+  bottom: 40px;
+  left: 4px;
   background-color: $bgColor;
   overflow: hidden;
   &.open {
@@ -410,21 +506,6 @@ export default {
   }
 }
 
-#left-column {
-  flex: 1 1 auto;
-
-  // Space for the AddTodo component
-  &::after {
-    content: "";
-    height: 16px;
-    display: block;
-  }
-}
-
-#list-view {
-  padding: 0 4px;
-}
-
 #right-column {
   background-color: lightgray;
   &.desktop {
@@ -437,7 +518,7 @@ export default {
     height: 100%;
     transition: width 2s;
     &.open {
-      width: 1024px;
+      width: $appWidth;
       transition: width 2s;
     }
     &.closed {

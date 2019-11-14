@@ -1,6 +1,6 @@
 <template>
   <div class="add-todo">
-    <hr />
+    <!-- <hr /> -->
     <input
       type="text"
       @keyup.enter="submit"
@@ -59,17 +59,17 @@ export default {
 .add-todo,
 input {
   width: 100%;
-  max-width: 1024px;
+  // max-width: 1024px;
 }
 
-.add-todo {
-  position: fixed;
-  bottom: 0;
-}
+// .add-todo {
+//   position: fixed;
+//   bottom: 0;
+// }
 
 input {
   font-size: 17px;
-  padding: 12px 16px;
+  padding: 12px 4px;
   // border: 6px solid $bgLightColor;
   border: none;
   background-color: $bgColor;
@@ -85,7 +85,7 @@ input {
   }
 }
 
-hr {
-  border: 2px solid $bgLightColor;
-}
+// hr {
+//   border: 2px solid $bgLightColor;
+// }
 </style>

@@ -77,8 +77,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../common";
+
 #app {
-  max-width: 1024px;
+  max-width: $appWidth;
   flex: 1 1 auto;
 }
 </style>

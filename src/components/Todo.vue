@@ -70,6 +70,7 @@ export default {
 @import "../common";
 
 $todoHeight: 36px;
+$importantButtonWidth: 12px;
 
 .todo {
   height: $todoHeight;
@@ -90,7 +91,7 @@ $todoHeight: 36px;
 #left {
   &:hover {
     .important-button {
-      width: 12px;
+      width: $importantButtonWidth;
     }
   }
 }
@@ -129,7 +130,7 @@ $todoHeight: 36px;
     color: $brandOrange;
   }
   .important-button {
-    width: 12px;
+    width: $importantButtonWidth;
   }
   // .block {
   //   width: 46px;
