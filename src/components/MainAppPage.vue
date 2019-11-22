@@ -1,84 +1,59 @@
 <template>
-  <div id="container" @click="closeMenu">
-    <div id="left-column">
-      <div id="top-bar">
-        <logo :showIcon="true" :showPhonetic="false" :showSubtitle="false" />
-      </div>
+  <div class="main-app" @click="closeMenu">
+    <div class="top-bar">
+      <logo :showIcon="true" :showPhonetic="false" :showSubtitle="false" />
+    </div>
 
-      <div id="content-area">
+    <div class="content-area">
+      <div class="left-column">
         <div v-if="loading" class="loader">Loading...</div>
 
-        <draggable v-else id="list-view" :list="db" @end="newTodoListOrder" handle=".drag-handle">
+        <draggable v-else class="todos" :list="db" @end="newTodoListOrder" handle=".drag-handle">
           <TodoList
             v-for="(list, index) in db"
             :listIndex="index"
             :id="list.id"
             :name="list.name"
             :show-completed="showCompleted"
+            :selected-todo-id="selectedTodoId"
             :key="list.id"
           />
         </draggable>
       </div>
 
-      <div id="bottom-bar">
-        <div id="menu" :class="{open: menuOpen}">
-          <div class="button" @click="showCompleted = !showCompleted">
-            <toggle-switch-off-outline-icon v-if="showCompleted == false" />
-            <toggle-switch-outline-icon v-else />
-            <span>Show Completed</span>
-          </div>
-          <div class="button" @click="refreshAll">
-            <refresh-icon />
-            <span>Refresh</span>
-          </div>
-          <div class="button" @click="logout">
-            <logout-variant-icon />
-            <span>Logout</span>
-          </div>
-        </div>
-
-        <div @click.stop="menuOpen = !menuOpen">
-          <menu-icon />
-        </div>
-        <add-todo :auth="auth" @add-todo="addTodo"></add-todo>
-      </div>
+      <detail-view
+        class="detail-view"
+        :class="{ open: openRightColumn }"
+        @close="selectedTodoId = null"
+      />
     </div>
 
-    <!-- <div
-      id="right-column"
-      :class="{ desktop: testDesktop, mobile: testMobile, open: testOpen, closed: testClosed }"
-    >
-      <p v-show="testOpen == true" @click="testOpen = !testOpen">Close</p>
-    </div>-->
+    <bottom-bar
+      :show-completed="showCompleted"
+      @toggle-completed="showCompleted = !showCompleted"
+      @refresh="refreshAll"
+      @logout="logout"
+    />
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import draggable from "vuedraggable";
 import api from "../api";
-import EventBus from "../eventBus";
-import AddTodo from "./AddTodo.vue";
-import TodoList from "./TodoList.vue";
+import BottomBar from "./BottomBar.vue";
 import configSchema from "../configSchema";
+import DetailView from "./DetailView.vue";
+import draggable from "vuedraggable";
+import EventBus from "../eventBus";
 import Logo from "./Logo.vue";
-import MenuIcon from "icons/Menu.vue";
-import RefreshIcon from "icons/Refresh.vue";
-import LogoutVariantIcon from "icons/LogoutVariant.vue";
-import ToggleSwitchOutlineIcon from "icons/ToggleSwitchOutline.vue";
-import ToggleSwitchOffOutlineIcon from "icons/ToggleSwitchOffOutline.vue";
+import TodoList from "./TodoList.vue";
 
 export default {
   components: {
-    AddTodo,
+    BottomBar,
+    DetailView,
     draggable,
-    TodoList,
     Logo,
-    MenuIcon,
-    RefreshIcon,
-    LogoutVariantIcon,
-    ToggleSwitchOutlineIcon,
-    ToggleSwitchOffOutlineIcon
+    TodoList
   },
 
   props: {
@@ -93,18 +68,13 @@ export default {
       loading: true,
       db: [],
       showCompleted: false,
-      menuOpen: false,
-      testMobile: false,
-      testOpen: false
+      selectedTodoId: null
     };
   },
 
   computed: {
-    testDesktop: function() {
-      return !this.testMobile;
-    },
-    testClosed: function() {
-      return !this.testOpen;
+    openRightColumn: function() {
+      return this.selectedTodoId != null;
     }
   },
 
@@ -118,9 +88,7 @@ export default {
 
   methods: {
     closeMenu: function() {
-      if (this.menuOpen == true) {
-        this.menuOpen = false;
-      }
+      EventBus.$emit("close-menu");
     },
 
     getUser: function() {
@@ -350,6 +318,10 @@ export default {
     updateTodoById: function(id, updates) {
       var [listIndex, todoIndex] = this.todoIndexById(id);
       this.updateTodoByIndex(listIndex, todoIndex, updates);
+    },
+
+    selectTodo: function(selectedTodoId) {
+      this.selectedTodoId = selectedTodoId;
     }
   },
 
@@ -357,6 +329,8 @@ export default {
     EventBus.$on("new-todo-order", this.newTodoOrder);
     EventBus.$on("update-todo-by-id", this.updateTodoById);
     EventBus.$on("update-todo-by-index", this.updateTodoByIndex);
+    EventBus.$on("select-todo", this.selectTodo);
+    EventBus.$on("add-todo", this.addTodo);
     this.refreshAll();
   }
 };
@@ -364,166 +338,63 @@ export default {
 
 <style lang="scss" scoped>
 @import "../common";
+@import "../loader";
 
-#container {
+.main-app {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   position: relative;
 }
 
-#top-bar {
-  margin: 0 0 20px 0;
+.top-bar {
+  height: 70px;
   padding: 0 4px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   @media #{$mobile} {
     justify-content: center;
   }
 }
 
-#left-column {
+.left-column {
   flex: 1 1 auto;
-
   // Space for the bottom bar
   &::after {
     content: "";
-    height: 12px;
+    height: 11px;
     display: block;
   }
 }
 
-#content-area {
-  width: 100%;
-  height: 100%;
+.content-area {
   display: flex;
   justify-content: center;
 }
 
-.loader,
-.loader:before,
-.loader:after {
-  background: $subduedColor;
-  -webkit-animation: load1 1s infinite ease-in-out;
-  animation: load1 1s infinite ease-in-out;
-  width: 1em;
-  height: 4em;
-}
-.loader {
-  color: $subduedColor;
-  text-indent: -9999em;
-  margin: 33% auto;
-  position: relative;
-  font-size: 11px;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
-}
-.loader:before,
-.loader:after {
-  position: absolute;
-  top: 0;
-  content: "";
-}
-.loader:before {
-  left: -1.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
-}
-.loader:after {
-  left: 1.5em;
-}
-@-webkit-keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em;
-    height: 5em;
-  }
-}
-@keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em;
-    height: 5em;
-  }
-}
-
-#list-view {
+.todos {
   flex: 1 1 auto;
   padding: 0 4px;
 }
 
-#bottom-bar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  max-width: $appWidth;
-  border-top: 2px solid $bgLightColor;
-  background-color: $bgColor;
-  display: flex;
-  align-items: center;
-  .menu-icon {
-    margin: 0 12px;
-    font-size: 24px;
-    color: $offWhite;
-    cursor: pointer;
-  }
-}
-
-#menu {
-  z-index: 1;
-  margin: 3px;
-  height: 0px;
-  transition: height 300ms;
-  position: absolute;
-  bottom: 40px;
-  left: 4px;
-  background-color: $bgColor;
+.detail-view {
   overflow: hidden;
+  flex: 0 0 auto;
+  width: 0px;
+  transition: width 500ms;
   &.open {
-    margin: 0;
-    height: 114px;
-    border: 3px solid $bgLightColor;
-  }
-  .button {
-    cursor: pointer;
-    font-size: 18px;
-    margin: 10px;
-    color: $offWhite;
-  }
-}
-
-#right-column {
-  background-color: lightgray;
-  &.desktop {
     width: 400px;
-    flex: 0 0 auto;
   }
-  &.mobile {
+
+  @media #{$mobile} {
     position: absolute;
     right: 0;
+    top: 0;
     height: 100%;
-    transition: width 2s;
+    padding-top: 0;
     &.open {
-      width: $appWidth;
-      transition: width 2s;
-    }
-    &.closed {
-      width: 0px;
-      transition: width 2s;
+      width: 100%;
     }
   }
 }

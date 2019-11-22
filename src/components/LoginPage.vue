@@ -1,5 +1,5 @@
 <template>
-  <div id="outer-container">
+  <div class="unauthenticated">
     <div id="inner-container">
       <logo />
 
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import api from "../api";
 import CheckBox from "./CheckBox.vue";
 import LoginVariantIcon from "icons/LoginVariant.vue";
@@ -72,13 +71,11 @@ export default {
           password: this.password
         })
         .then(function(r) {
-          parent.$emit("update-token", r.data, parent.remember);
+          parent.$emit("new-token", r.data, parent.remember);
         })
         .catch(function(e) {
           if (e.response.status == 401) {
             parent.message = "Invalid username or password, please try again.";
-          } else {
-            parent.message = "An unknown error has occured.";
           }
         })
         .finally(function() {
@@ -92,7 +89,7 @@ export default {
 <style lang="scss" scoped>
 @import "../common";
 
-#outer-container {
+.unauthenticated {
   height: 100%;
   display: flex;
   flex-direction: column;

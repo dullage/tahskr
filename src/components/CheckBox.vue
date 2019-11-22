@@ -2,7 +2,7 @@
   <div
     class="checkbox"
     :class="{ complete: checked, incomplete: !checked, dim: dim }"
-    @click="toggled"
+    @click.stop="toggled"
   >
     <check-bold-icon class="check-box-icon" />
   </div>

@@ -1,16 +1,16 @@
 <template>
-  <div :class="{ complete: completed, incomplete: !completed, important: important }" class="todo">
-    <div id="left">
-      <div class="important-button" @click="toggleImportant"></div>
+  <div
+    class="todo"
+    :class="{ complete: completed, incomplete: !completed, important: important, selected: selected }"
+    @click="select"
+  >
+    <div class="todo-left">
       <check-box class="check-box" :checked="completed" @toggled="toggleCompleted" />
       <span class="summary">{{ summary }}</span>
     </div>
-    <div id="right">
-      <!-- <div class="important-button" @click="toggleImportant">
-        <span>!</span>
-        <alert-box-icon />
-      </div>
-      <div class="block"></div>-->
+
+    <div class="todo-right">
+      <div class="important-button" @click.stop="toggleImportant"></div>
     </div>
   </div>
 </template>
@@ -19,12 +19,10 @@
 import api from "../api";
 import CheckBox from "./CheckBox.vue";
 import EventBus from "../eventBus.js";
-import AlertBoxIcon from "icons/AlertBox.vue";
 
 export default {
   components: {
-    CheckBox,
-    AlertBoxIcon
+    CheckBox
   },
 
   props: {
@@ -33,7 +31,8 @@ export default {
     id: { type: Number, required: true },
     summary: { type: String, required: true },
     completedDatetime: { type: Date },
-    important: { type: Boolean, required: true }
+    important: { type: Boolean, required: true },
+    selectedTodoId: { type: Number }
   },
 
   computed: {
@@ -42,6 +41,14 @@ export default {
         return false;
       } else {
         return true;
+      }
+    },
+
+    selected: function() {
+      if (this.id == this.selectedTodoId) {
+        return true;
+      } else {
+        return false;
       }
     }
   },
@@ -61,6 +68,10 @@ export default {
       EventBus.$emit("update-todo-by-index", this.listIndex, this.todoIndex, {
         important: !this.important
       });
+    },
+
+    select: function() {
+      EventBus.$emit("select-todo", this.id);
     }
   }
 };
@@ -69,8 +80,7 @@ export default {
 <style lang="scss" scoped>
 @import "../common";
 
-$todoHeight: 36px;
-$importantButtonWidth: 12px;
+// $importantButtonWidth: 12px;
 
 .todo {
   height: $todoHeight;
@@ -88,27 +98,19 @@ $importantButtonWidth: 12px;
   }
 }
 
-#left {
+.todo-left {
+  flex: 1 1 auto;
+}
+
+.todo-right {
+  flex: 1 1 auto;
+  flex-direction: row-reverse;
   &:hover {
     .important-button {
-      width: $importantButtonWidth;
+      width: $todoHeight;
     }
   }
 }
-
-.check-box {
-  margin: 10px;
-}
-
-// .important-button {
-//   margin: 0 6px 0 0;
-//   cursor: pointer;
-//   color: rgb(59, 59, 78);
-//   font-size: 28px;
-//   svg {
-//     position: static;
-//   }
-// }
 
 .important-button {
   background-color: $brandOrange;
@@ -116,6 +118,16 @@ $importantButtonWidth: 12px;
   height: $todoHeight;
   transition: width 200ms;
   cursor: pointer;
+}
+
+.check-box {
+  margin: 0 10px;
+}
+
+.selected {
+  &.todo {
+    background-color: lighten($bgLightColor, 10%);
+  }
 }
 
 .complete {
@@ -127,19 +139,8 @@ $importantButtonWidth: 12px;
 
 .important {
   .important-button {
-    color: $brandOrange;
-  }
-  .important-button {
-    width: $importantButtonWidth;
-  }
-  // .block {
-  //   width: 46px;
-  //   height: $todoHeight;
-  //   background-color: $brandOrange;
-  // }
-  &.todo {
-    // color: $brandOrange;
-    // border-left: 12px solid $brandOrange;
+    width: $todoHeight / 2;
+    background-color: $brandOrange;
   }
 }
 </style>

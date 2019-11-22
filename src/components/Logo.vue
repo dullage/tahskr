@@ -37,20 +37,20 @@ export default {
 
 .logo {
   color: $offWhite;
-}
 
-.checkbox-multiple-marked-outline-icon {
-  margin: 0 4px 1px 0;
-  font-size: 28px;
-  color: $brandOrange;
-}
+  .checkbox-multiple-marked-outline-icon {
+    margin: 0 4px 1px 0;
+    font-size: 28px;
+    color: $brandOrange;
+  }
 
-.title {
-  font-family: $brandFontStack;
-  font-size: 40px;
-}
+  .title {
+    font-family: $brandFontStack;
+    font-size: 40px;
+  }
 
-.subtitle {
-  font-style: italic;
+  .subtitle {
+    font-style: italic;
+  }
 }
 </style>

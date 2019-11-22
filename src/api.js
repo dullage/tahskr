@@ -11,6 +11,8 @@ api.interceptors.response.use(
   },
   function(error) {
     if (error.response.status != 401) {
+      EventBus.$emit("logout");
+    } else {
       EventBus.$emit("communication-error");
     }
     return Promise.reject(error);
