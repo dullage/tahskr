@@ -4,7 +4,7 @@
       <logo :showIcon="true" :showPhonetic="false" :showSubtitle="false" />
     </div>
 
-    <div class="content-area">
+    <div class="content-area" :class="{ 'detail-view-open': detailViewOpen }">
       <div class="left-column">
         <div v-if="loading" class="loader">Loading...</div>
 
@@ -21,11 +21,15 @@
         </draggable>
       </div>
 
-      <detail-view
-        class="detail-view"
-        :class="{ open: openRightColumn }"
-        @close="selectedTodoId = null"
-      />
+      <div class="detail-view">
+        <todo-detail-view
+          v-if="selectedTodoId != null"
+          @close="selectedTodoId = null"
+          :todo-id="selectedTodo.id"
+          :summary="selectedTodo.summary"
+          :completed-datetime="selectedTodo.completedDatetime"
+        />
+      </div>
     </div>
 
     <bottom-bar
@@ -41,7 +45,7 @@
 import api from "../api";
 import BottomBar from "./BottomBar.vue";
 import configSchema from "../configSchema";
-import DetailView from "./DetailView.vue";
+import TodoDetailView from "./TodoDetailView.vue";
 import draggable from "vuedraggable";
 import EventBus from "../eventBus";
 import Logo from "./Logo.vue";
@@ -50,7 +54,7 @@ import TodoList from "./TodoList.vue";
 export default {
   components: {
     BottomBar,
-    DetailView,
+    TodoDetailView,
     draggable,
     Logo,
     TodoList
@@ -73,8 +77,17 @@ export default {
   },
 
   computed: {
-    openRightColumn: function() {
+    detailViewOpen: function() {
       return this.selectedTodoId != null;
+    },
+
+    selectedTodo: function() {
+      if (this.selectedTodoId == null) {
+        return null;
+      } else {
+        var [listIndex, todoIndex] = this.todoIndexById(this.selectedTodoId);
+        return this.db[listIndex].todos[todoIndex];
+      }
     }
   },
 
@@ -131,6 +144,7 @@ export default {
 
     refreshAll: function() {
       this.loading = true;
+      this.selectedTodoId = null;
       this.db.splice(0, this.db.length);
       this.getUser();
       this.getTodoLists();
@@ -349,8 +363,15 @@ export default {
 }
 
 .top-bar {
-  height: 70px;
+  position: fixed;
+  z-index: 1;
+  flex: 1 1 auto;
+  width: 100%;
+  height: $topBarHeight;
+  max-width: $appWidth;
   padding: 0 4px;
+  background-color: $bgColor;
+  border-bottom: 2px solid $bgLightColor;
   display: flex;
   align-items: flex-start;
   @media #{$mobile} {
@@ -360,17 +381,13 @@ export default {
 
 .left-column {
   flex: 1 1 auto;
-  // Space for the bottom bar
-  &::after {
-    content: "";
-    height: 11px;
-    display: block;
-  }
+  transition: margin 500ms;
 }
 
 .content-area {
   display: flex;
   justify-content: center;
+  padding: calc(#{$topBarHeight} + 10px) 0 11px 0;
 }
 
 .todos {
@@ -378,17 +395,26 @@ export default {
   padding: 0 4px;
 }
 
+$detailViewVerticalMargin: 10px;
+
 .detail-view {
+  z-index: 1;
+  position: fixed;
+  top: $topBarHeight + $detailViewVerticalMargin;
+  right: calc((100% - #{$appWidth}) / 2);
+  // height: calc(
+  //   100% - #{$topBarHeight} - #{$bottomBarHeight} - #{$detailViewVerticalMargin *
+  //     2}
+  // );
+  background-color: $bgColor; ///////////////////
   overflow: hidden;
-  flex: 0 0 auto;
-  width: 0px;
-  transition: width 500ms;
-  &.open {
-    width: 400px;
-  }
+  // width: 0px;
+  // transition: width 500ms;
+  opacity: 0;
+  transition: opacity 300ms linear 500ms;
 
   @media #{$mobile} {
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     height: 100%;
@@ -396,6 +422,17 @@ export default {
     &.open {
       width: 100%;
     }
+  }
+}
+
+.detail-view-open {
+  $detailViewOpenWidth: 400px;
+  .left-column {
+    margin-right: $detailViewOpenWidth + 10px;
+  }
+  .detail-view {
+    width: $detailViewOpenWidth;
+    opacity: 1;
   }
 }
 </style>

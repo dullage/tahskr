@@ -89,10 +89,12 @@ export default {
 @import "../common";
 
 .bottom-bar {
+  z-index: 1;
   position: fixed;
   bottom: 0;
   width: 100%;
   max-width: $appWidth;
+  height: $bottomBarHeight;
   border-top: 2px solid $bgLightColor;
   background-color: $bgColor;
   display: flex;
@@ -106,7 +108,7 @@ export default {
 }
 
 .menu {
-  z-index: 1;
+  z-index: 2;
   margin: 3px;
   height: 0px;
   transition: height 300ms;

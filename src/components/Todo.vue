@@ -90,11 +90,15 @@ export default {
   justify-content: space-between;
   cursor: grab;
   background-color: $bgLightColor;
+  border-left: 3px solid $bgLightColor;
   color: $offWhite;
   font-size: 17px;
   div {
     display: flex;
     align-items: center;
+  }
+  &:hover {
+    background-color: lighten($bgLightColor, 2%);
   }
 }
 
@@ -127,6 +131,7 @@ export default {
 .selected {
   &.todo {
     background-color: lighten($bgLightColor, 10%);
+    border-left-color: lighten($bgLightColor, 10%);
   }
 }
 
@@ -138,9 +143,8 @@ export default {
 }
 
 .important {
-  .important-button {
-    width: $todoHeight / 2;
-    background-color: $brandOrange;
+  &.todo {
+    border-left-color: $brandOrange;
   }
 }
 </style>
