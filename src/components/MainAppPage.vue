@@ -28,6 +28,7 @@
           :todo-id="selectedTodo.id"
           :summary="selectedTodo.summary"
           :completed-datetime="selectedTodo.completedDatetime"
+          :important="selectedTodo.important"
         />
       </div>
     </div>
@@ -411,7 +412,7 @@ $detailViewVerticalMargin: 10px;
   // width: 0px;
   // transition: width 500ms;
   opacity: 0;
-  transition: opacity 300ms linear 500ms;
+  transition: opacity 300ms linear 400ms;
 
   @media #{$mobile} {
     position: fixed;

@@ -6,9 +6,21 @@
 
       <div class="row">
         <check-box :checked="completed" @toggled="toggleCompleted" />
-        <span v-show="!completed">Mark as completed</span>
-        <span v-show="completed">Completed: {{ completedDatetime }}</span>
+        <span v-show="!completed" class="clickable" @click="toggleCompleted">Mark as completed</span>
+        <span v-show="completed" class="clickable" @click="toggleCompleted">Completed: {{ completedDatetime }}</span>
       </div>
+
+      <div class="row">
+        <alert-circle-outline-icon class="clickable" @click="toggleImportant" />
+        <span v-show="important" class="clickable" @click="toggleImportant">Unset as Important</span>
+        <span v-show="!important" class="clickable" @click="toggleImportant">Set as Important</span>
+      </div>
+
+      <div class="row">
+        <sleep-icon />
+        <p>Snooze Until</p>
+      </div>
+      <input type="date" />
     </div>
 
     <!-- Bottom -->
@@ -24,20 +36,27 @@
 </template>
 
 <script>
-import CloseIcon from "icons/Close.vue";
 import CheckBox from "./CheckBox.vue";
 import EventBus from "../eventBus";
 
+// Icons
+import AlertCircleOutlineIcon from "icons/AlertCircleOutline.vue";
+import CloseIcon from "icons/Close.vue";
+import SleepIcon from "icons/Sleep.vue";
+
 export default {
   components: {
+    AlertCircleOutlineIcon,
     CloseIcon,
-    CheckBox
+    CheckBox,
+    SleepIcon
   },
 
   props: {
     todoId: { type: Number, required: true },
     summary: { type: String, required: true },
-    completedDatetime: { type: Date }
+    completedDatetime: { type: Date },
+    important: { type: Boolean, required: true }
   },
 
   computed: {
@@ -63,6 +82,12 @@ export default {
       EventBus.$emit("update-todo-by-id", this.todoId, {
         completedDatetime: newCompletedDatetime
       });
+    },
+
+    toggleImportant: function() {
+      EventBus.$emit("update-todo-by-id", this.todoId, {
+        important: !this.important
+      });
     }
   }
 };
@@ -85,15 +110,23 @@ export default {
   // animation-duration: 300ms;
   // animation-delay: 500ms;
   // animation-fill-mode: forwards;
+  .material-design-icon {
+    font-size: 17px;
+    margin-right: 8px;
+  }
 }
 
 @keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .top {
-  margin-bottom: 100px;
+  margin-bottom: 20px;
 }
 
 .close-button-container {
@@ -105,22 +138,19 @@ export default {
   font-size: 17px;
 }
 
-p,
 .row {
-  margin-bottom: 6px;
-}
-
-.row {
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
 }
 
 .checkbox {
-  margin-right: 8px;
+  margin: 0 10px 0 2px;
 }
 
 .summary {
-  font-size: 17px;
+  font-size: 19px;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 </style>

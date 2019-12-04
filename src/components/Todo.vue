@@ -10,7 +10,9 @@
     </div>
 
     <div class="todo-right">
-      <div class="important-button" @click.stop="toggleImportant"></div>
+      <div class="important-button" title="Important" @click.stop="toggleImportant">
+        <alert-circle-outline-icon title="Important" />
+      </div>
     </div>
   </div>
 </template>
@@ -20,8 +22,12 @@ import api from "../api";
 import CheckBox from "./CheckBox.vue";
 import EventBus from "../eventBus.js";
 
+// Icons
+import AlertCircleOutlineIcon from "icons/AlertCircleOutline.vue";
+
 export default {
   components: {
+    AlertCircleOutlineIcon,
     CheckBox
   },
 
@@ -118,10 +124,19 @@ export default {
 
 .important-button {
   background-color: $brandOrange;
-  width: 0px;
+  color: darken($brandOrange, 15%);
+  width: 0;
   height: $todoHeight;
   transition: width 200ms;
   cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  .material-design-icon__svg {
+    bottom: 0;
+  }
 }
 
 .check-box {
