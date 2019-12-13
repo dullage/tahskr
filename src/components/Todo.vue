@@ -10,8 +10,12 @@
     </div>
 
     <div class="todo-right">
-      <div class="important-button" title="Important" @click.stop="toggleImportant">
-        <alert-circle-outline-icon title="Important" />
+      <div class="important-button" title="Toggle Important" @click.stop="toggleImportant">
+        <alert-circle-outline-icon title="Toggle Important" />
+      </div>
+      <div v-show="snoozeDatetime != null && snoozeDatetime > Date.now()" class="snoozed-label">
+        <sleep-icon />
+        <span class="snoozed-label-text">Snoozed until {{ formattedSnoozeDatetime }}</span>
       </div>
     </div>
   </div>
@@ -21,14 +25,17 @@
 import api from "../api";
 import CheckBox from "./CheckBox.vue";
 import EventBus from "../eventBus.js";
+import helpers from "../helpers";
 
 // Icons
 import AlertCircleOutlineIcon from "icons/AlertCircleOutline.vue";
+import SleepIcon from "icons/Sleep.vue";
 
 export default {
   components: {
     AlertCircleOutlineIcon,
-    CheckBox
+    CheckBox,
+    SleepIcon
   },
 
   props: {
@@ -38,6 +45,7 @@ export default {
     summary: { type: String, required: true },
     completedDatetime: { type: Date },
     important: { type: Boolean, required: true },
+    snoozeDatetime: { type: Date },
     selectedTodoId: { type: Number }
   },
 
@@ -56,7 +64,11 @@ export default {
       } else {
         return false;
       }
-    }
+    },
+
+    formattedSnoozeDatetime: function() {
+      return helpers.formatDate(this.snoozeDatetime);
+    },
   },
 
   methods: {
@@ -86,8 +98,6 @@ export default {
 <style lang="scss" scoped>
 @import "../common";
 
-// $importantButtonWidth: 12px;
-
 .todo {
   height: $todoHeight;
   margin: 0 0 4px 0;
@@ -96,7 +106,7 @@ export default {
   justify-content: space-between;
   cursor: grab;
   background-color: $bgLightColor;
-  border-left: 3px solid $bgLightColor;
+  border-left: 4px solid $bgLightColor;
   color: $offWhite;
   font-size: 17px;
   div {
@@ -124,7 +134,7 @@ export default {
 
 .important-button {
   background-color: $brandOrange;
-  color: darken($brandOrange, 15%);
+  color: $offWhite;
   width: 0;
   height: $todoHeight;
   transition: width 200ms;
@@ -160,6 +170,14 @@ export default {
 .important {
   &.todo {
     border-left-color: $brandOrange;
+  }
+}
+
+.snoozed-label {
+  font-size: 14px;
+  color: $subduedColor;
+  .snoozed-label-text {
+    margin: 0 14px 0 4px;
   }
 }
 </style>

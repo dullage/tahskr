@@ -15,6 +15,7 @@
             :id="list.id"
             :name="list.name"
             :show-completed="showCompleted"
+            :show-snoozed="showSnoozed"
             :selected-todo-id="selectedTodoId"
             :key="list.id"
           />
@@ -29,13 +30,17 @@
           :summary="selectedTodo.summary"
           :completed-datetime="selectedTodo.completedDatetime"
           :important="selectedTodo.important"
+          :snoozeDatetime="selectedTodo.snoozeDatetime"
+          :created="selectedTodo.created"
         />
       </div>
     </div>
 
     <bottom-bar
       :show-completed="showCompleted"
+      :show-snoozed="showSnoozed"
       @toggle-completed="showCompleted = !showCompleted"
+      @toggle-snoozed="showSnoozed = !showSnoozed"
       @refresh="refreshAll"
       @logout="logout"
     />
@@ -73,6 +78,7 @@ export default {
       loading: true,
       db: [],
       showCompleted: false,
+      showSnoozed: false,
       selectedTodoId: null
     };
   },
@@ -94,6 +100,12 @@ export default {
 
   watch: {
     showCompleted: function(newValue) {
+      if (newValue == true) {
+        this.refreshAll();
+      }
+    },
+
+    showSnoozed: function(newValue) {
       if (newValue == true) {
         this.refreshAll();
       }
@@ -131,11 +143,20 @@ export default {
       }
 
       api
-        .get("/api/todo", { params: { completed: completedOption } })
+        .get("/api/todo", {
+          params: {
+            completed: completedOption,
+            excludeSnoozed: !this.showSnoozed
+          }
+        })
         .then(function(r) {
           r.data.forEach(function(todo) {
+            todo.created = new Date(todo.created);
             if (todo.completedDatetime != null) {
               todo.completedDatetime = new Date(todo.completedDatetime);
+            }
+            if (todo.snoozeDatetime != null) {
+              todo.snoozeDatetime = new Date(todo.snoozeDatetime);
             }
           });
           parent.stagedTodos = r.data;
@@ -403,10 +424,10 @@ $detailViewVerticalMargin: 10px;
   position: fixed;
   top: $topBarHeight + $detailViewVerticalMargin;
   right: calc((100% - #{$appWidth}) / 2);
-  // height: calc(
-  //   100% - #{$topBarHeight} - #{$bottomBarHeight} - #{$detailViewVerticalMargin *
-  //     2}
-  // );
+  height: calc(
+    100% - #{$topBarHeight} - #{$bottomBarHeight} - #{$detailViewVerticalMargin *
+      2}
+  );
   background-color: $bgColor; ///////////////////
   overflow: hidden;
   // width: 0px;

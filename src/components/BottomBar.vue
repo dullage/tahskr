@@ -7,6 +7,12 @@
         <span>Show Completed</span>
       </div>
 
+      <div class="menu-button" @click="$emit('toggle-snoozed')">
+        <toggle-switch-off-outline-icon v-if="showSnoozed == false" />
+        <toggle-switch-icon v-else />
+        <span>Show Snoozed</span>
+      </div>
+
       <div class="menu-button" @click="$emit('refresh')">
         <refresh-icon />
         <span>Refresh</span>
@@ -52,7 +58,8 @@ export default {
   },
 
   props: {
-    showCompleted: { type: Boolean, required: true }
+    showCompleted: { type: Boolean, required: true },
+    showSnoozed: { type: Boolean, required: true }
   },
 
   data: function() {
@@ -73,6 +80,7 @@ export default {
       var parent = this;
 
       api.post("/api/todo", { summary: this.inputContent }).then(function(r) {
+        r.data.created = new Date(r.data.created);
         EventBus.$emit("add-todo", r.data);
         parent.inputContent = null;
       });
@@ -119,7 +127,7 @@ export default {
   overflow: hidden;
   &.open {
     margin: 0;
-    height: 114px;
+    height: 146px;
     border: 3px solid $bgLightColor;
   }
 }

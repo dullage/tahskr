@@ -8,7 +8,7 @@
     </div>
 
     <div class="todos-container" :class="{empty: empty}">
-      <p class="placeholder">Empty</p>
+      <p class="placeholder">EMPTY</p>
 
       <draggable
         :list="todos"
@@ -22,13 +22,14 @@
         <!-- <transition-group name="drag"> -->
         <Todo
           v-for="(todo, todoIndex) in todos"
-          v-show="showCompleted == true || todo.completedDatetime == null"
+          v-show="(showCompleted == true || todo.completedDatetime == null) && (showSnoozed == true || todo.snoozeDatetime == null || todo.snoozeDatetime < Date.now())"
           :list-index="listIndex"
           :todo-index="todoIndex"
           :id="todo.id"
           :summary="todo.summary"
           :completed-datetime="todo.completedDatetime"
           :important="todo.important"
+          :snooze-datetime="todo.snoozeDatetime"
           :selected-todo-id="selectedTodoId"
           :key="todo.id"
         />
@@ -57,6 +58,7 @@ export default {
     id: { type: Number, required: true },
     name: { type: String, required: true },
     showCompleted: { type: Boolean, required: true },
+    showSnoozed: { type: Boolean, required: true },
     selectedTodoId: { type: Number }
   },
 
@@ -138,7 +140,7 @@ export default {
   height: $todoHeight;
   color: $subduedColor;
   text-align: center;
-  font-size: 17px;
+  font-size: 0.8em;
   border: $bgLightColor 2px dashed;
   line-height: 30px;
   opacity: 0%;

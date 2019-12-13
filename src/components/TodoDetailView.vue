@@ -1,5 +1,7 @@
 <template>
   <div class="todo-detail-view">
+    <close-icon class="clickable" @click="close" />
+
     <!-- Top -->
     <div class="top">
       <p class="summary">{{ summary }}</p>
@@ -7,7 +9,11 @@
       <div class="row">
         <check-box :checked="completed" @toggled="toggleCompleted" />
         <span v-show="!completed" class="clickable" @click="toggleCompleted">Mark as completed</span>
-        <span v-show="completed" class="clickable" @click="toggleCompleted">Completed: {{ completedDatetime }}</span>
+        <span
+          v-show="completed"
+          class="clickable"
+          @click="toggleCompleted"
+        >Completed: {{ formattedCompletedDatetime }}</span>
       </div>
 
       <div class="row">
@@ -18,26 +24,24 @@
 
       <div class="row">
         <sleep-icon />
-        <p>Snooze Until</p>
+        <span>Snooze Until</span>
       </div>
-      <input type="date" />
+
+      <date-picker is-dark color="yellow" v-model="snoozeDatetimeInput" />
     </div>
 
     <!-- Bottom -->
     <div class="bottom">
-      <div class="close-button-container">
-        <span class="close-button" @click="close">
-          <!-- <close-icon /> -->
-          Close
-        </span>
-      </div>
+      <p class="created-timestamp">Created: {{ formattedCreated }}</p>
     </div>
   </div>
 </template>
 
 <script>
 import CheckBox from "./CheckBox.vue";
+import DatePicker from "v-calendar/lib/components/date-picker.umd";
 import EventBus from "../eventBus";
+import helpers from "../helpers";
 
 // Icons
 import AlertCircleOutlineIcon from "icons/AlertCircleOutline.vue";
@@ -49,6 +53,7 @@ export default {
     AlertCircleOutlineIcon,
     CloseIcon,
     CheckBox,
+    DatePicker,
     SleepIcon
   },
 
@@ -56,7 +61,15 @@ export default {
     todoId: { type: Number, required: true },
     summary: { type: String, required: true },
     completedDatetime: { type: Date },
-    important: { type: Boolean, required: true }
+    important: { type: Boolean, required: true },
+    snoozeDatetime: { type: Date },
+    created: { type: Date, required: true }
+  },
+
+  data: function() {
+    return {
+      snoozeDatetimeInput: null
+    };
   },
 
   computed: {
@@ -66,12 +79,35 @@ export default {
       } else {
         return true;
       }
+    },
+
+    formattedCompletedDatetime: function() {
+      return helpers.formatDate(this.completedDatetime, true);
+    },
+
+    formattedCreated: function() {
+      return helpers.formatDate(this.created, true);
+    }
+  },
+
+  watch: {
+    todoId: function() {
+      this.initSnoozeDatetimeInputValue();
+    },
+    snoozeDatetimeInput: function() {
+      EventBus.$emit("update-todo-by-id", this.todoId, {
+        snoozeDatetime: this.snoozeDatetimeInput
+      });
     }
   },
 
   methods: {
     close: function() {
       this.$emit("close");
+    },
+
+    initSnoozeDatetimeInputValue: function() {
+      this.snoozeDatetimeInput = this.snoozeDatetime;
     },
 
     toggleCompleted: function() {
@@ -89,6 +125,10 @@ export default {
         important: !this.important
       });
     }
+  },
+
+  created: function() {
+    this.initSnoozeDatetimeInputValue();
   }
 };
 </script>
@@ -97,19 +137,14 @@ export default {
 @import "../common";
 
 .todo-detail-view {
-  background-color: $bgLightColor;
+  background-color: $bgColor;
   color: $offWhite;
   width: 100%;
-  // height: 100%;
+  height: 100%;
   padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  // opacity: 0;
-  // animation-name: fadein;
-  // animation-duration: 300ms;
-  // animation-delay: 500ms;
-  // animation-fill-mode: forwards;
   .material-design-icon {
     font-size: 17px;
     margin-right: 8px;
@@ -129,17 +164,15 @@ export default {
   margin-bottom: 20px;
 }
 
-.close-button-container {
-  text-align: left;
-}
-
-.close-button {
-  cursor: pointer;
-  font-size: 17px;
+.close-icon {
+  position: absolute;
+  top: 4px;
+  right: 1px;
+  font-size: 24px !important;
 }
 
 .row {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
 }
@@ -151,6 +184,12 @@ export default {
 .summary {
   font-size: 19px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+}
+
+.created-timestamp {
+  color: $subduedColor;
+  font-size: 0.8em;
+  text-align: center;
 }
 </style>
