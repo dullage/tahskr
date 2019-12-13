@@ -22,7 +22,7 @@
         <!-- <transition-group name="drag"> -->
         <Todo
           v-for="(todo, todoIndex) in todos"
-          v-show="(showCompleted == true || todo.completedDatetime == null) && (showSnoozed == true || todo.snoozeDatetime == null || todo.snoozeDatetime < Date.now())"
+          v-show="((showCompleted == true || todo.completedDatetime == null) && (showSnoozed == true || todo.snoozeDatetime == null || todo.snoozeDatetime < Date.now())) || todo.id == selectedTodoId"
           :list-index="listIndex"
           :todo-index="todoIndex"
           :id="todo.id"
