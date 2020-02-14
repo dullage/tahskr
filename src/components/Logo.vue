@@ -1,30 +1,20 @@
 <template>
   <div class="logo">
-    <checkbox-multiple-marked-outline-icon />
-    <span class="title">tahskr</span>
-    <span class="phonetic" v-if="showPhonetic">[task-er]</span>
-    <div class="subtitle" v-if="showSubtitle">(noun) yet another todo app</div>
+    <div class="title">
+      <span class="brand-oranges">tah</span><span class="brand-oranges">skr</span><span class="brand-orange" :class="{ cursor: blink }">_</span>
+    </div>
+    <div class="subtitle" v-if="showSubtitle">[task-er] n. yet another todo app</div>
   </div>
 </template>
 
 <script>
-import CheckboxMultipleMarkedOutlineIcon from "icons/CheckboxMultipleMarkedOutline.vue";
-
 export default {
-  components: {
-    CheckboxMultipleMarkedOutlineIcon
-  },
-
   props: {
-    showIcon: {
-      type: Boolean,
-      default: true
-    },
-    showPhonetic: {
-      type: Boolean,
-      default: true
-    },
     showSubtitle: {
+      type: Boolean,
+      default: true
+    },
+    blink: {
       type: Boolean,
       default: true
     }
@@ -38,15 +28,24 @@ export default {
 .logo {
   color: $offWhite;
 
-  .checkbox-multiple-marked-outline-icon {
-    margin: 0 4px 1px 0;
-    font-size: 28px;
+  .brand-orange {
     color: $brandOrange;
   }
 
   .title {
-    font-family: $brandFontStack;
     font-size: 40px;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  .cursor {
+    animation-name: blink;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: step-start;
   }
 
   .subtitle {

@@ -1,7 +1,7 @@
 <template>
   <div class="main-app" @click="closeMenu">
     <div class="top-bar">
-      <logo :showIcon="true" :showPhonetic="false" :showSubtitle="false" />
+      <logo :showSubtitle="false" :blink="true" />
     </div>
 
     <div class="content-area" :class="{ 'detail-view-open': detailViewOpen }">
