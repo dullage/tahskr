@@ -24,7 +24,7 @@
 
       <div class="detail-view">
         <todo-detail-view
-          v-if="selectedTodoId != null"
+          v-if="detailViewOpen"
           @close="selectedTodoId = null"
           :todo-id="selectedTodo.id"
           :summary="selectedTodo.summary"
@@ -422,39 +422,45 @@ $detailViewVerticalMargin: 10px;
 .detail-view {
   z-index: 1;
   position: fixed;
-  top: $topBarHeight + $detailViewVerticalMargin;
-  right: calc((100% - #{$appWidth}) / 2);
-  height: calc(
-    100% - #{$topBarHeight} - #{$bottomBarHeight} - #{$detailViewVerticalMargin *
-      2}
-  );
-  background-color: $bgColor; ///////////////////
+  background-color: $bgColor;
   overflow: hidden;
-  // width: 0px;
-  // transition: width 500ms;
   opacity: 0;
-  transition: opacity 300ms linear 400ms;
+
+  @media #{$desktop} {
+    top: $topBarHeight + $detailViewVerticalMargin;
+    right: calc((100% - #{$appWidth}) / 2);
+    height: calc(
+      100% - #{$topBarHeight} - #{$bottomBarHeight} - #{$detailViewVerticalMargin *
+        2}
+    );
+    transition: opacity 300ms linear 400ms;
+  }
 
   @media #{$mobile} {
-    position: fixed;
+    top: $topBarHeight;
     right: 0;
-    top: 0;
-    height: 100%;
-    padding-top: 0;
-    &.open {
-      width: 100%;
-    }
+    height: calc(100% - #{$topBarHeight} - #{$bottomBarHeight});
+    transition: opacity 300ms linear 0ms;
   }
 }
 
 .detail-view-open {
   $detailViewOpenWidth: 400px;
+
   .left-column {
-    margin-right: $detailViewOpenWidth + 10px;
+    @media #{$desktop} {
+      margin-right: $detailViewOpenWidth + 10px;
+    }
   }
   .detail-view {
-    width: $detailViewOpenWidth;
     opacity: 1;
+
+    @media #{$desktop} {
+      width: $detailViewOpenWidth;
+    }
+    @media #{$mobile} {
+      width: 100%;
+    }
   }
 }
 </style>
