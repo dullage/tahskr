@@ -39,8 +39,8 @@ export default {
 
   methods: {
     loadSavedAuth: function() {
-      var cookieToken = Cookies.get("token");
-      var cookieUserId = Cookies.get("userId");
+      var cookieToken = localStorage.getItem("token")
+      var cookieUserId = localStorage.getItem("userId")
       if (cookieToken && cookieUserId) {
         this.auth.token = cookieToken;
         this.auth.userId = cookieUserId;
@@ -52,15 +52,15 @@ export default {
       this.auth.token = token.token;
       this.auth.userId = token.userId;
       if (remember == true) {
-        Cookies.set("token", token.token, { expires: 30 });
-        Cookies.set("userId", token.userId, { expires: 30 });
+        localStorage.setItem("token", token.token);
+        localStorage.setItem("userId", token.userId);
       }
       api.defaults.headers.common["x-token"] = token.token;
     },
 
     logout: function() {
-      Cookies.remove("token");
-      Cookies.remove("userId");
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
       this.auth.token = null;
       this.auth.userId = null;
       delete api.defaults.headers.common["x-token"];
