@@ -127,7 +127,7 @@ export default {
   overflow: hidden;
   &.open {
     margin: 0;
-    height: 146px;
+    height: 160px;
     border: 3px solid $bgLightColor;
   }
 }

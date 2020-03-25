@@ -116,7 +116,7 @@ input[type="password"] {
   display: block;
   padding: 0 16px;
   border: none;
-  width: 300px;
+  width: 100%;
   height: 40px;
   background-color: $bgLightColor;
   color: $offWhite;
