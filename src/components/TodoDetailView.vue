@@ -4,8 +4,28 @@
 
     <!-- Top -->
     <div class="top">
-      <p class="summary">{{ summary }}</p>
+      <!-- Summary -->
+      <div class="row">
+        <!-- View -->
+        <span v-show="!editSummaryMode" class="summary">{{ summary }}</span>
+        <div v-show="!editSummaryMode">
+          <pencil-icon class="clickable edit-summary-button" @click="editSummary" />
+        </div>
 
+        <!-- Edit -->
+        <input
+          v-show="editSummaryMode"
+          id="input-summary"
+          class="summary"
+          type="text"
+          v-model="summaryInput"
+        />
+        <div v-show="editSummaryMode">
+          <content-save-icon class="clickable" @click="saveSummary" />
+        </div>
+      </div>
+
+      <!-- Completed -->
       <div class="row">
         <check-box :checked="completed" @toggled="toggleCompleted" />
         <span v-show="!completed" class="clickable" @click="toggleCompleted">Mark as completed</span>
@@ -16,12 +36,14 @@
         >Completed: {{ formattedCompletedDatetime }}</span>
       </div>
 
+      <!-- Important -->
       <div class="row">
         <alert-circle-outline-icon class="clickable" @click="toggleImportant" />
         <span v-show="important" class="clickable" @click="toggleImportant">Unset as Important</span>
         <span v-show="!important" class="clickable" @click="toggleImportant">Set as Important</span>
       </div>
 
+      <!-- Snooze -->
       <div class="row">
         <sleep-icon />
         <span>Snooze Until</span>
@@ -47,6 +69,8 @@ import helpers from "../helpers";
 import AlertCircleOutlineIcon from "icons/AlertCircleOutline.vue";
 import CloseIcon from "icons/Close.vue";
 import SleepIcon from "icons/Sleep.vue";
+import PencilIcon from "icons/Pencil.vue";
+import ContentSaveIcon from "icons/ContentSave.vue";
 
 export default {
   components: {
@@ -54,7 +78,9 @@ export default {
     CloseIcon,
     CheckBox,
     DatePicker,
-    SleepIcon
+    SleepIcon,
+    PencilIcon,
+    ContentSaveIcon
   },
 
   props: {
@@ -68,7 +94,9 @@ export default {
 
   data: function() {
     return {
-      snoozeDatetimeInput: null
+      summaryInput: null,
+      snoozeDatetimeInput: null,
+      editSummaryMode: false
     };
   },
 
@@ -92,7 +120,7 @@ export default {
 
   watch: {
     todoId: function() {
-      this.initSnoozeDatetimeInputValue();
+      this.inputInit();
     },
     snoozeDatetimeInput: function() {
       EventBus.$emit("update-todo-by-id", this.todoId, {
@@ -106,8 +134,27 @@ export default {
       this.$emit("close");
     },
 
-    initSnoozeDatetimeInputValue: function() {
+    inputInit: function() {
+      this.summaryInput = this.summary;
       this.snoozeDatetimeInput = this.snoozeDatetime;
+    },
+
+    editSummary: function() {
+      this.editSummaryMode = true;
+
+      // Wait for the input the be rendered then set focus.
+      this.$nextTick(function() {
+        document.getElementById("input-summary").select();
+      });
+    },
+
+    saveSummary: function() {
+      if (this.summaryInput != this.summary) {
+        EventBus.$emit("update-todo-by-id", this.todoId, {
+          summary: this.summaryInput
+        });
+      }
+      this.editSummaryMode = false;
     },
 
     toggleCompleted: function() {
@@ -128,7 +175,7 @@ export default {
   },
 
   created: function() {
-    this.initSnoozeDatetimeInputValue();
+    this.inputInit();
   }
 };
 </script>
@@ -184,7 +231,26 @@ export default {
 .summary {
   font-size: 19px;
   font-weight: bold;
-  margin-bottom: 14px;
+  margin-right: 4px;
+  padding: 6px 0;
+}
+
+input.summary {
+  background-color: $bgColor;
+  color: $offWhite;
+  border: 2px solid $bgLightColor;
+  padding: 4px 12px;
+  width: calc(100% - 60px);
+  &:focus {
+    outline: none;
+  }
+}
+
+.edit-summary-button {
+  color: $subduedColor;
+  &:hover {
+    color: $offWhite;
+  }
 }
 
 .created-timestamp {
