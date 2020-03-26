@@ -107,6 +107,7 @@ export default {
   background-color: $bgColor;
   display: flex;
   align-items: center;
+
   .menu-icon {
     margin: 0 12px;
     font-size: 24px;
