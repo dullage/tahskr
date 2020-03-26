@@ -10,7 +10,7 @@ function createWindow() {
   win.loadFile("./dist/index.html");
 
   // Open dev tools in separate window.
-  // win.webContents.openDevTools({mode:'undocked'});
+  win.webContents.openDevTools({mode:'undocked'});
 }
 
 app.on("ready", createWindow);
