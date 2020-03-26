@@ -64,7 +64,7 @@ export default {
   .checkbox:hover {
     .check-box-icon {
       display: block;
-      opacity: 50%;
+      opacity: 0.5;
     }
   }
 }

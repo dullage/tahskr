@@ -143,13 +143,13 @@ export default {
   font-size: 0.8em;
   border: $bgLightColor 2px dashed;
   line-height: 30px;
-  opacity: 0%;
+  opacity: 0;
   transition: opacity 100ms;
   pointer-events: none;
 }
 
 .empty .placeholder {
-  opacity: 100%;
+  opacity: 1;
 }
 
 .todos {
