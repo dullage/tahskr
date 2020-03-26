@@ -39,8 +39,8 @@ export default {
 
   methods: {
     loadSavedAuth: function() {
-      var cookieToken = localStorage.getItem("token")
-      var cookieUserId = localStorage.getItem("userId")
+      var cookieToken = localStorage.getItem("token");
+      var cookieUserId = localStorage.getItem("userId");
       if (cookieToken && cookieUserId) {
         this.auth.token = cookieToken;
         this.auth.userId = cookieUserId;

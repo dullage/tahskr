@@ -39,7 +39,7 @@
 import api from "../api";
 import CheckBox from "./CheckBox.vue";
 import LoginVariantIcon from "icons/LoginVariant.vue";
-import Logo from "./Logo.vue"
+import Logo from "./Logo.vue";
 
 export default {
   components: {
