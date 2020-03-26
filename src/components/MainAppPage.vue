@@ -242,58 +242,61 @@ export default {
       }
     },
 
+    sortByStoredOrder: function(a, b, storedOrder) {
+      let aIndex = storedOrder.indexOf(a.id);
+      let bIndex = storedOrder.indexOf(b.id);
+
+      // Both ordered
+      if (aIndex > -1 && bIndex > -1) {
+        return aIndex - bIndex;
+      }
+      // Neither ordered
+      if (aIndex == -1 && bIndex == -1) {
+        return 0;
+      }
+      // One ordered - Prioritise ordered over unordered
+      else {
+        if (aIndex == -1) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+    },
+
     sortTodoLists: function(toSort, order) {
+      let parent = this;
       toSort.sort(function(a, b) {
-        let aIndex = order.indexOf(a.id);
-        let bIndex = order.indexOf(b.id);
-        // Both ordered
-        if (aIndex > -1 && bIndex > -1) {
-          return aIndex - bIndex;
-        }
-        // Neither ordered
-        if (aIndex == -1 && bIndex == -1) {
-          return 0;
-        }
-        // One ordered - Prioritise ordered over unordered
-        else {
-          if (aIndex == -1) {
-            return 1;
-          } else {
-            return -1;
-          }
-        }
+        return parent.sortByStoredOrder(a, b, order);
       });
     },
 
     sortTodos: function(toSort, order) {
+      let parent = this;
       toSort.sort(function(a, b) {
-        // TODO: This is a duplication of the above.
-        // Order incomplete by user config
+        // Sort incomplete first by importance then by user config
         if (a.completedDatetime == null && b.completedDatetime == null) {
-          let aIndex = order.indexOf(a.id);
-          let bIndex = order.indexOf(b.id);
-          // Both ordered
-          if (aIndex > -1 && bIndex > -1) {
-            return aIndex - bIndex;
+          // Same importance
+          if (a.important == b.important) {
+            return parent.sortByStoredOrder(a, b, order);
           }
-          // Neither ordered
-          if (aIndex == -1 && bIndex == -1) {
-            return 0;
-          }
-          // One ordered - Prioritise ordered over unordered
+
+          // Different importance
           else {
-            if (aIndex == -1) {
-              return 1;
-            } else {
+            if (a.important == true) {
               return -1;
+            } else {
+              return 1;
             }
           }
         }
-        // Order complete by completedDatetime DESC
+
+        // Sort complete by completedDatetime DESC
         else if (a.completedDatetime != null && b.completedDatetime != null) {
           return b.completedDatetime - a.completedDatetime;
         }
-        // Order incomplete above complete
+
+        // Sort incomplete above complete
         else {
           if (a.completedDatetime == null) {
             return -1;
