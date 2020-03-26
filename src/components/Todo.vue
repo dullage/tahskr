@@ -108,7 +108,7 @@ export default {
   background-color: $bgLightColor;
   border-left: 4px solid $bgLightColor;
   color: $offWhite;
-  font-size: 17px;
+  font-size: 14px;
   div {
     display: flex;
     align-items: center;
