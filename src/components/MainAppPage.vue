@@ -8,7 +8,16 @@
       <div class="left-column">
         <div v-if="loading" class="loader">Loading...</div>
 
-        <draggable v-else class="todos" :list="db" @end="newTodoListOrder" handle=".drag-handle">
+        <draggable
+          v-else
+          class="todos"
+          :list="db"
+          @end="newTodoListOrder"
+          handle=".drag-handle"
+          delay="400"
+          delay-on-touch-only="true"
+          touch-start-threshold="3"
+        >
           <TodoList
             v-for="(list, index) in db"
             :listIndex="index"

@@ -18,6 +18,9 @@
         invert-swap="true"
         class="todos"
         ghost-class="ghost"
+        delay="400"
+        delay-on-touch-only="true"
+        touch-start-threshold="3"
       >
         <!-- <transition-group name="drag"> -->
         <Todo
