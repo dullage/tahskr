@@ -61,10 +61,12 @@ export default {
   .check-box-icon {
     display: none;
   }
-  .checkbox:hover {
-    .check-box-icon {
-      display: block;
-      opacity: 0.5;
+  @media (hover: hover) {
+    .checkbox:hover {
+      .check-box-icon {
+        display: block;
+        opacity: 0.5;
+      }
     }
   }
 }

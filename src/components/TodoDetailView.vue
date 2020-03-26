@@ -248,8 +248,10 @@ input.summary {
 
 .edit-summary-button {
   color: $subduedColor;
-  &:hover {
-    color: $offWhite;
+  @media (hover: hover) {
+    &:hover {
+      color: $offWhite;
+    }
   }
 }
 

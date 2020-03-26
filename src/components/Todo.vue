@@ -68,7 +68,7 @@ export default {
 
     formattedSnoozeDatetime: function() {
       return helpers.formatDate(this.snoozeDatetime);
-    },
+    }
   },
 
   methods: {
@@ -113,8 +113,10 @@ export default {
     display: flex;
     align-items: center;
   }
-  &:hover {
-    background-color: lighten($bgLightColor, 2%);
+  @media (hover: hover) {
+    &:hover {
+      background-color: lighten($bgLightColor, 2%);
+    }
   }
 }
 
@@ -125,9 +127,11 @@ export default {
 .todo-right {
   flex: 1 1 auto;
   flex-direction: row-reverse;
-  &:hover {
-    .important-button {
-      width: $todoHeight;
+  @media (hover: hover) {
+    &:hover {
+      .important-button {
+        width: $todoHeight;
+      }
     }
   }
 }
