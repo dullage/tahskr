@@ -99,7 +99,8 @@ export default {
 @import "../common";
 
 .todo {
-  height: $todoHeight;
+  height: auto;
+  min-height: $todoMinHeight;
   margin: 0 0 4px 0;
   display: flex;
   align-items: center;
@@ -137,10 +138,11 @@ export default {
 .todo-right {
   flex: 1 1 auto;
   flex-direction: row-reverse;
+  min-width: $todoMinHeight;
   @media (hover: hover) {
     &:hover {
       .important-button {
-        width: $todoHeight;
+        width: $todoMinHeight;
       }
     }
   }
@@ -150,7 +152,7 @@ export default {
   background-color: $brandOrange;
   color: $offWhite;
   width: 0;
-  height: $todoHeight;
+  height: $todoMinHeight;
   transition: width 200ms;
   cursor: pointer;
   overflow: hidden;
@@ -165,6 +167,10 @@ export default {
 
 .check-box {
   margin: 0 10px;
+}
+
+.summary {
+  margin: 6px 0 6px 0;
 }
 
 .selected {

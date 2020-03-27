@@ -40,7 +40,7 @@ export default {
 
 .checkbox {
   height: 12px;
-  width: 12px;
+  min-width: 12px;
   cursor: pointer;
   background-color: white;
   color: $bgColor;

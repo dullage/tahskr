@@ -140,7 +140,7 @@ export default {
 .placeholder {
   position: absolute;
   width: 100%;
-  height: $todoHeight;
+  height: $todoMinHeight;
   color: $subduedColor;
   text-align: center;
   font-size: 0.8em;
@@ -156,7 +156,7 @@ export default {
 }
 
 .todos {
-  min-height: $todoHeight;
+  min-height: $todoMinHeight;
 }
 
 // .drag-move {
