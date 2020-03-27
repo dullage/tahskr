@@ -117,7 +117,7 @@ export default {
 @import "../common";
 
 .list {
-  margin: 0 0 40px 0;
+  margin-bottom: $todoListBottomMargin;
 }
 
 .list-title {

@@ -421,7 +421,14 @@ export default {
 .content-area {
   display: flex;
   justify-content: center;
-  padding: calc(#{$topBarHeight} + 10px) 0 11px 0;
+  padding-top: calc(#{$topBarHeight} + 10px);
+}
+
+// Bottom padding to allow for bottom bar when scrolling
+.left-column:after {
+  content: ' ';
+  display: block;
+  height: calc(#{$bottomBarHeight} - #{$todoListBottomMargin} + 10px);
 }
 
 .todos {
