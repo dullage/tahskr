@@ -106,7 +106,7 @@ export default {
   justify-content: space-between;
   cursor: grab;
   background-color: $bgLightColor;
-  border-left: 4px solid $bgLightColor;
+  border-left: 4px solid transparent;
   color: $offWhite;
   font-size: 14px;
   div {
@@ -117,6 +117,16 @@ export default {
     &:hover {
       background-color: lighten($bgLightColor, 2%);
     }
+  }
+
+  &.sortable-drag {
+    display: none;
+  }
+
+  &.sortable-chosen {
+    transition: transform 200ms ease 100ms;
+    background-color: lighten($bgLightColor, 10%);
+    transform: scaleX(1.02);
   }
 }
 

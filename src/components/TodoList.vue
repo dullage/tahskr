@@ -17,10 +17,10 @@
         @end="newTodoOrder"
         invert-swap="true"
         class="todos"
-        ghost-class="ghost"
         delay="400"
         delay-on-touch-only="true"
         touch-start-threshold="3"
+        force-fallback="true"
       >
         <!-- <transition-group name="drag"> -->
         <Todo
@@ -162,8 +162,4 @@ export default {
 // .drag-move {
 //   transition: transform 0.5s;
 // }
-
-.ghost {
-  opacity: 0.1;
-}
 </style>
