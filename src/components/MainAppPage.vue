@@ -452,7 +452,7 @@ $detailViewVerticalMargin: 10px;
     top: $topBarHeight;
     right: 0;
     height: calc(100% - #{$topBarHeight} - #{$bottomBarHeight});
-    transition: opacity 300ms linear 0ms;
+    transition: opacity 100ms linear 0ms;
   }
 }
 
