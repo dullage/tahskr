@@ -96,3 +96,7 @@ public
 
 # DynamoDB Local files
 .dynamodb/
+
+# Custom
+dist/
+builds/

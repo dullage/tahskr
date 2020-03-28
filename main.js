@@ -1,13 +1,16 @@
-const { app, BrowserWindow, ipcMain  } = require("electron");
+const { app, BrowserWindow } = require("electron");
 
 function createWindow() {
   let win = new BrowserWindow({
-    webPreferences: {
-      nodeIntegration: true
-    }
+    width: 500,
+    height: 800
   });
 
-  win.loadFile("index.html");
+  win.setMenu(null);
+  win.loadFile("./dist/index.html");
+
+  // Open dev tools in separate window.
+  //win.webContents.openDevTools({mode:'undocked'});
 }
 
 app.on("ready", createWindow);
