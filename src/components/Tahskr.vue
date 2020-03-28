@@ -9,7 +9,6 @@
 <script>
 import api from "../api";
 import CommunicationErrorPage from "./CommunicationErrorPage.vue";
-import Cookies from "js-cookie";
 import EventBus from "../eventBus.js";
 import LoginPage from "./LoginPage.vue";
 import MainAppPage from "./MainAppPage.vue";
@@ -39,12 +38,12 @@ export default {
 
   methods: {
     loadSavedAuth: function() {
-      var cookieToken = localStorage.getItem("token");
-      var cookieUserId = localStorage.getItem("userId");
-      if (cookieToken && cookieUserId) {
-        this.auth.token = cookieToken;
-        this.auth.userId = cookieUserId;
-        api.defaults.headers.common["x-token"] = cookieToken;
+      var storedToken = localStorage.getItem("token");
+      var storedUserId = localStorage.getItem("userId");
+      if (storedToken && storedUserId) {
+        this.auth.token = storedToken;
+        this.auth.userId = storedUserId;
+        api.defaults.headers.common["x-token"] = storedToken;
       }
     },
 
