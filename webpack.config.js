@@ -5,7 +5,7 @@ const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  mode: "development",
+  mode: "production",
   devtool: "inline-source-map",
   devServer: {
     contentBase: "./dist"
