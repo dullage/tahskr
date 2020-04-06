@@ -120,7 +120,7 @@ export default {
 
   watch: {
     todoId: function() {
-      this.inputInit();
+      this.init();
     },
     snoozeDatetimeInput: function() {
       EventBus.$emit("update-todo-by-id", this.todoId, {
@@ -134,9 +134,10 @@ export default {
       this.$emit("close");
     },
 
-    inputInit: function() {
+    init: function() {
       this.summaryInput = this.summary;
       this.snoozeDatetimeInput = this.snoozeDatetime;
+      this.editSummaryMode = false;
     },
 
     editSummary: function() {
@@ -175,7 +176,7 @@ export default {
   },
 
   created: function() {
-    this.inputInit();
+    this.init();
   }
 };
 </script>
