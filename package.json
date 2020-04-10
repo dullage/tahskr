@@ -20,6 +20,9 @@
     "url": "https://github.com/Dullage/tahskr/issues"
   },
   "homepage": "https://github.com/Dullage/tahskr#readme",
+  "dependencies": {
+    "custom-electron-titlebar": "^3.2.2-hotfix62"
+  },
   "devDependencies": {
     "@hapi/joi": "^16.1.7",
     "autoprefixer": "^9.7.4",
