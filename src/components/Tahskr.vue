@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <communication-error-page v-if="communicationError" />
+    <communication-error-page v-if="loggedIn && communicationError" />
     <main-app-page v-else-if="loggedIn" :auth="auth" />
-    <login-page v-else @new-token="updateAuth" />
+    <login-page v-else @login="login" />
   </div>
 </template>
 
@@ -32,25 +32,28 @@ export default {
 
   computed: {
     loggedIn: function() {
-      return this.auth.token != null && this.auth.token != null;
+      return this.auth.token != null && this.auth.userId != null;
     }
   },
 
   methods: {
     loadSavedAuth: function() {
+      var storedServerAddress = localStorage.getItem("serverAddress");
       var storedToken = localStorage.getItem("token");
       var storedUserId = localStorage.getItem("userId");
-      if (storedToken && storedUserId) {
+      if (storedServerAddress && storedToken && storedUserId) {
         this.auth.token = storedToken;
         this.auth.userId = storedUserId;
+        api.defaults.baseURL = storedServerAddress;
         api.defaults.headers.common["x-token"] = storedToken;
       }
     },
 
-    updateAuth: function(token, remember) {
+    login: function(serverAddress, token, remember) {
       this.auth.token = token.token;
       this.auth.userId = token.userId;
       if (remember == true) {
+        localStorage.setItem("serverAddress", serverAddress);
         localStorage.setItem("token", token.token);
         localStorage.setItem("userId", token.userId);
       }
@@ -58,11 +61,14 @@ export default {
     },
 
     logout: function() {
+      localStorage.removeItem("serverAddress");
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
       this.auth.token = null;
       this.auth.userId = null;
+      delete api.defaults.baseURL;
       delete api.defaults.headers.common["x-token"];
+      this.communicationError = false;
     }
   },
 

@@ -1,16 +1,39 @@
 <template>
   <div class="communication-error">
     <alert-circle-outline-icon class="shake animated" />
-    <span class="message">Send help, something's gone wrong!</span>
+    <span class="message">Error communicating with the tahskr server!</span>
+    <div class="button" @click="logout">
+      <logout-variant-icon />
+      <span>Exit to Login Screen</span>
+    </div>
+    <div class="button" @click="reload">
+      <refresh-icon />
+      <span>Reload</span>
+    </div>
   </div>
 </template>
 
 <script>
 import AlertCircleOutlineIcon from "icons/AlertCircleOutline.vue";
+import EventBus from "../eventBus";
+import LogoutVariantIcon from "icons/LogoutVariant.vue";
+import RefreshIcon from "icons/Refresh.vue";
 
 export default {
   components: {
-    AlertCircleOutlineIcon
+    AlertCircleOutlineIcon,
+    LogoutVariantIcon,
+    RefreshIcon
+  },
+
+  methods: {
+    reload: function() {
+      location.reload();s
+    },
+
+    logout: function() {
+      EventBus.$emit("logout");
+    }
   }
 };
 </script>
@@ -27,12 +50,20 @@ export default {
   justify-content: center;
 
   .alert-circle-outline-icon {
-    margin: 0 0 36px 0;
     font-size: 80px;
   }
 
   .message {
+    margin: 36px 0;
     font-size: 20px;
+    text-align: center;
+  }
+
+  .button {
+    margin: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: $offWhite;
   }
 }
 

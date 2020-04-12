@@ -1,16 +1,17 @@
 import axios from "axios";
 import EventBus from "./eventBus.js";
 
-const api = axios.create({
-  baseURL: `https://api.tahskr.com`
-});
+const api = axios.create();
 
 api.interceptors.response.use(
   function(response) {
     return response;
   },
   function(error) {
-    if ((error.response.status = 401)) {
+    if (
+      typeof error.response !== "undefined" &&
+      error.response.status === 401
+    ) {
       EventBus.$emit("logout");
     } else {
       EventBus.$emit("communication-error");
