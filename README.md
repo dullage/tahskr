@@ -7,4 +7,4 @@
 
 A mobile responsive website and electron app to manage to-dos.
 
-Also see [tahskr-core](https://github.com/Dullage/tahskr-core).
+Also see [tahskr-server](https://github.com/Dullage/tahskr-server).
