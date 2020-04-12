@@ -5,14 +5,21 @@
 
       <div id="login-form">
         <form @submit.prevent="submit()">
+          <!-- Username -->
+          <input type="text" id="username" v-model="username" placeholder="Username" required />
+
+          <!-- Password -->
+          <input type="password" id="password" v-model="password" placeholder="Password" required />
+
+          <!-- Server Address -->
           <input
-            type="email"
-            id="email"
-            v-model="emailAddress"
-            placeholder="Email Address"
+            type="url"
+            id="serverAddress"
+            v-model="serverAddress"
+            placeholder="Server Address"
             required
           />
-          <input type="password" id="password" v-model="password" placeholder="Password" required />
+
           <div id="remember-me">
             <check-box
               class="check-box"
@@ -50,7 +57,8 @@ export default {
 
   data: function() {
     return {
-      emailAddress: null,
+      serverAddress: "https://api.tahskr.com",
+      username: null,
       password: null,
       remember: false,
       message: null
@@ -64,18 +72,22 @@ export default {
 
     submit: function() {
       var parent = this;
+      api.defaults.baseURL = this.serverAddress;
 
       api
         .post("/auth", {
-          emailAddress: this.emailAddress,
+          emailAddress: this.username,
           password: this.password
         })
         .then(function(r) {
-          parent.$emit("new-token", r.data, parent.remember);
+          parent.$emit("login", parent.serverAddress, r.data, parent.remember);
         })
         .catch(function(e) {
-          if (e.response.status == 401) {
+          if (typeof e.response !== "undefined" && e.response.status == 401) {
             parent.message = "Invalid username or password, please try again.";
+          } else {
+            parent.message =
+              "Unable to communicate with the tahskr server, please check the 'Server Address' entered.";
           }
         })
         .finally(function() {
@@ -110,7 +122,8 @@ export default {
   margin: 0 0 50px 0;
 }
 
-input[type="email"],
+input[type="url"],
+input[type="text"],
 input[type="password"] {
   margin: 8px 0;
   display: block;

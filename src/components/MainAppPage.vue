@@ -424,16 +424,16 @@ export default {
   padding-top: calc(#{$topBarHeight} + 10px);
 }
 
-// Bottom padding to allow for bottom bar when scrolling
-.left-column:after {
-  content: ' ';
-  display: block;
-  height: calc(#{$bottomBarHeight} - #{$todoListBottomMargin} + 10px);
-}
-
 .todos {
   flex: 1 1 auto;
   padding: 0 4px;
+}
+
+// Bottom padding to allow for bottom bar when scrolling
+.todos:after {
+  content: " ";
+  display: block;
+  height: calc(#{$bottomBarHeight} - #{$todoListBottomMargin} + 10px);
 }
 
 $detailViewVerticalMargin: 10px;
@@ -453,6 +453,10 @@ $detailViewVerticalMargin: 10px;
         2}
     );
     transition: opacity 300ms linear 400ms;
+  }
+
+  @media only screen and (max-width: #{$appWidth}) {
+    right: 0;
   }
 
   @media #{$mobile} {
