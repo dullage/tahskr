@@ -79,7 +79,7 @@ export default {
     submit: function() {
       var parent = this;
 
-      api.post("/api/todo", { summary: this.inputContent }).then(function(r) {
+      api.post("/todo", { summary: this.inputContent }).then(function(r) {
         r.data.created = new Date(r.data.created);
         EventBus.$emit("add-todo", r.data);
         parent.inputContent = null;

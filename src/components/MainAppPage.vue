@@ -128,7 +128,7 @@ export default {
 
     getUser: function() {
       var parent = this;
-      api.get(`/api/user/${this.auth.userId}`).then(function(r) {
+      api.get(`/user/${this.auth.userId}`).then(function(r) {
         r.data.config = configSchema.validate(r.data.config).value;
         parent.user = r.data;
         parent.dataLoadedCheck();
@@ -137,7 +137,7 @@ export default {
 
     getTodoLists: function() {
       var parent = this;
-      api.get("/api/todolist").then(function(r) {
+      api.get("/todolist").then(function(r) {
         parent.stagedTodoLists = r.data;
         parent.dataLoadedCheck();
       });
@@ -152,7 +152,7 @@ export default {
       }
 
       api
-        .get("/api/todo", {
+        .get("/todo", {
           params: {
             completed: completedOption,
             excludeSnoozed: !this.showSnoozed
@@ -333,7 +333,7 @@ export default {
 
     postConfig: function() {
       var parent = this;
-      api.patch(`/api/user/${this.auth.userId}`, {
+      api.patch(`/user/${this.auth.userId}`, {
         config: this.user.config
       });
     },
@@ -359,7 +359,7 @@ export default {
     updateTodoByIndex: function(listIndex, todoIndex, updates) {
       var todo = this.db[listIndex].todos[todoIndex];
       Object.assign(todo, updates);
-      api.patch(`/api/todo/${todo.id}`, updates);
+      api.patch(`/todo/${todo.id}`, updates);
       this.sortListByIndex(listIndex);
     },
 
