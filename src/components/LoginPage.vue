@@ -76,7 +76,7 @@ export default {
 
       api
         .post("/auth", {
-          emailAddress: this.username,
+          username: this.username,
           password: this.password
         })
         .then(function(r) {
