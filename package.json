@@ -8,7 +8,7 @@
     "start": "webpack && electron .",
     "serve": "webpack-dev-server --open",
     "build": "webpack",
-    "package-win": "webpack && electron-packager . --overwrite --asar --platform=win32 --arch=ia32 --icon=src/icons/favicon/favicon.ico --prune=true --out=builds --ignore=^/src"
+    "package-win": "webpack && electron-packager . --overwrite --asar --platform=win32 --arch=ia32 --icon=src/icons/favicon.ico --prune=true --out=builds --ignore=^/src"
   },
   "repository": {
     "type": "git",

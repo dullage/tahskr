@@ -41,6 +41,6 @@ module.exports = {
       template: "./src/index.html"
     }),
     new VueLoaderPlugin(),
-    new CopyPlugin([{ from: path.resolve(__dirname, "src/icons/favicon") }])
+    new CopyPlugin([{ from: path.resolve(__dirname, "src/icons") }])
   ]
 };
