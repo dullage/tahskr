@@ -1,6 +1,4 @@
-arch: amd64
-os: linux
-dist: xenial
+os: windows
 language: node_js
 node_js:
   - node
@@ -43,7 +41,7 @@ jobs:
     #   script: bash ./.travis/bump_version.sh
 
     - stage: Test Build
-      script: bash ./.travis/build.sh
+      script: webpack
 
     # - stage: Build & Deploy Prod
     #   script: bash ./.travis/build.sh prod
