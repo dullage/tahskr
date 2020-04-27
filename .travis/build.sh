@@ -2,4 +2,6 @@
 
 set -ev
 
-npm run package-win
+webpack
+ls ./dist
+# npm run package-win
