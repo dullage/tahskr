@@ -41,7 +41,9 @@ jobs:
     #   script: bash ./.travis/bump_version.sh
 
     - stage: Test Build
-      script: webpack
+      script:
+        - webpack
+        - npm run package-win
 
     # - stage: Build & Deploy Prod
     #   script: bash ./.travis/build.sh prod
