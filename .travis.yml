@@ -1,0 +1,50 @@
+arch: amd64
+os: linux
+dist: xenial
+language: node_js
+
+env:
+  global:
+    - "GIT_REPO_SLUG=dullage/tahskr"
+    - "VERSION_BUMP_MESSAGE_PREFIX='Travis CI: Bump version to'"
+# secret:
+#   - GITHUB_TOKEN
+#   - encrypted_7df0bf92a043_iv
+#   - encrypted_7df0bf92a043_key
+#   - DEPLOY_SCRIPT_DEV
+#   - DEPLOY_SCRIPT_PROD
+#   - DEPLOY_HOST_IP
+
+install:
+  # - sudo apt update
+  # - sudo apt -y install jq
+  - npm ci
+
+if: tag IS NOT present
+
+stages:
+  # - name: Bump Version
+  #   if: branch = master && type = push && commit_message !~ env(VERSION_BUMP_MESSAGE_PREFIX)
+
+  - name: Test Build
+    if: commit_message !~ env(VERSION_BUMP_MESSAGE_PREFIX)
+
+  # - name: Build & Deploy Prod
+  #   if: branch = master && type = push && commit_message =~ env(VERSION_BUMP_MESSAGE_PREFIX)
+
+  # - name: Build & Deploy Dev
+  #   if: branch = develop && type = push
+
+jobs:
+  include:
+    # - stage: Bump Version
+    #   script: bash ./.travis/bump_version.sh
+
+    - stage: Test Build
+      script: bash ./.travis/build.sh
+
+    # - stage: Build & Deploy Prod
+    #   script: bash ./.travis/build.sh prod
+
+    # - stage: Build & Deploy Dev
+    #   script: bash ./.travis/build.sh dev
