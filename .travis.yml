@@ -17,10 +17,6 @@ env:
 #   - DEPLOY_SCRIPT_DEV
 #   - DEPLOY_SCRIPT_PROD
 
-before_install:
-  - choco install openssl.light -y
-  - openssl aes-256-cbc -K $encrypted_7df0bf92a043_key -iv $encrypted_7df0bf92a043_iv -in $TRAVIS_BUILD_DIR/.travis/ssh_key.enc -out $TRAVIS_BUILD_DIR/.travis/ssh_key -d
-
 install:
   # - sudo apt update
   # - sudo apt -y install jq
@@ -47,10 +43,16 @@ jobs:
     #   script: bash ./.travis/bump_version.sh
 
     - stage: Test Build
+      before_install:
+        - choco install openssl.light -y
+        - openssl aes-256-cbc -K $encrypted_7df0bf92a043_key -iv $encrypted_7df0bf92a043_iv -in $TRAVIS_BUILD_DIR/.travis/ssh_key.enc -out $TRAVIS_BUILD_DIR/.travis/ssh_key -d
       script:
-        - webpack
+        - npm run build
         - npm run package-win
-        - scp -r -i $TRAVIS_BUILD_DIR/.travis/ssh_key -o StrictHostKeyChecking=no $TRAVIS_BUILD_DIR/dist $TRAVIS_BUILD_DIR/builds travis@$DEPLOY_HOST_IP:$DEPLOY_DIR_DEV
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
 
     # - stage: Build & Deploy Prod
     #   script: bash ./.travis/build.sh prod
