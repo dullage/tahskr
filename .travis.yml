@@ -12,8 +12,8 @@ env:
 #   - DEPLOY_DIR_DEV
 #   - encrypted_7df0bf92a043_iv
 #   - encrypted_7df0bf92a043_key
-
 #   - GITHUB_TOKEN
+
 #   - DEPLOY_SCRIPT_DEV
 #   - DEPLOY_SCRIPT_PROD
 
@@ -45,14 +45,18 @@ jobs:
     - stage: Test Build
       before_install:
         - choco install openssl.light -y
-        - openssl aes-256-cbc -K $encrypted_7df0bf92a043_key -iv $encrypted_7df0bf92a043_iv -in $TRAVIS_BUILD_DIR/.travis/ssh_key.enc -out $TRAVIS_BUILD_DIR/.travis/ssh_key -d
       script:
+        - bash $TRAVIS_BUILD_DIR/.travis/bump_version.sh
         - npm run build
         - npm run package-win
+      before_deploy:
+        - choco install python
       deploy:
         skip_cleanup: true
         provider: script
         script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
+        on:
+          branch: feature/travis-builds
 
     # - stage: Build & Deploy Prod
     #   script: bash ./.travis/build.sh prod
