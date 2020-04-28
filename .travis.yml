@@ -50,7 +50,7 @@ jobs:
       script:
         - webpack
         - npm run package-win
-        - scp -r -i $TRAVIS_BUILD_DIR\.travis\ssh_key $TRAVIS_BUILD_DIR\dist $TRAVIS_BUILD_DIR\builds travis@$DEPLOY_HOST_IP:$DEPLOY_DIR_DEV
+        - scp -r -i $TRAVIS_BUILD_DIR/.travis/ssh_key $TRAVIS_BUILD_DIR/dist $TRAVIS_BUILD_DIR/builds travis@$DEPLOY_HOST_IP:$DEPLOY_DIR_DEV
 
     # - stage: Build & Deploy Prod
     #   script: bash ./.travis/build.sh prod
