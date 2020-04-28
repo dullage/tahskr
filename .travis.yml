@@ -50,7 +50,7 @@ jobs:
         - npm run build
         - npm run package-win
       before_deploy:
-        - choco install python
+        - choco install python -y
       deploy:
         skip_cleanup: true
         provider: script
