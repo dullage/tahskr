@@ -19,7 +19,7 @@ env:
 
 before_install:
   - choco install openssl.light -y
-  - openssl aes-256-cbc -K %encrypted_7df0bf92a043_key% -iv %encrypted_7df0bf92a043_iv% -in %TRAVIS_BUILD_DIR%/.travis/ssh_key.enc -out %TRAVIS_BUILD_DIR%/.travis/ssh_key -d
+  - openssl aes-256-cbc -K $encrypted_7df0bf92a043_key -iv $encrypted_7df0bf92a043_iv -in $TRAVIS_BUILD_DIR/.travis/ssh_key.enc -out $TRAVIS_BUILD_DIR/.travis/ssh_key -d
 
 install:
   # - sudo apt update
@@ -50,7 +50,7 @@ jobs:
       script:
         - webpack
         - npm run package-win
-        - scp -r -i %TRAVIS_BUILD_DIR%\.travis\ssh_key %TRAVIS_BUILD_DIR%\dist %TRAVIS_BUILD_DIR%\builds travis@%DEPLOY_HOST_IP%:%DEPLOY_DIR_DEV%
+        - scp -r -i $TRAVIS_BUILD_DIR\.travis\ssh_key $TRAVIS_BUILD_DIR\dist $TRAVIS_BUILD_DIR\builds travis@$DEPLOY_HOST_IP:$DEPLOY_DIR_DEV
 
     # - stage: Build & Deploy Prod
     #   script: bash ./.travis/build.sh prod
