@@ -9,7 +9,7 @@ env:
     - "VERSION_BUMP_MESSAGE_PREFIX='Travis CI: Bump version to'"
 # secret:
 #   - DEPLOY_HOST_IP
-#   - DEPLOY_DIR_DEV
+#   - DULLAGEENV
 #   - encrypted_7df0bf92a043_iv
 #   - encrypted_7df0bf92a043_key
 #   - GITHUB_TOKEN
