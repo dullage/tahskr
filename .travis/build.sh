@@ -2,6 +2,10 @@
 
 set -ev
 
-webpack
-ls ./dist
+# npm ci
+
+# webpack
+
 # npm run package-win
+
+echo Build: $DEPLOY_TARGET_DIR

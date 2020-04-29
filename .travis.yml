@@ -9,18 +9,13 @@ env:
     - "VERSION_BUMP_MESSAGE_PREFIX='Travis CI: Bump version to'"
 # secret:
 #   - DEPLOY_HOST_IP
-#   - DULLAGEENV
 #   - encrypted_7df0bf92a043_iv
 #   - encrypted_7df0bf92a043_key
 #   - GITHUB_TOKEN
+#   - DEPLOY_TARGET_DIR
 
 #   - DEPLOY_SCRIPT_DEV
 #   - DEPLOY_SCRIPT_PROD
-
-install:
-  # - sudo apt update
-  # - sudo apt -y install jq
-  - npm ci
 
 if: tag IS NOT present
 
@@ -43,10 +38,8 @@ jobs:
     #   script: bash ./.travis/bump_version.sh
 
     - stage: Test Build
-      before_install:
-        - choco install openssl.light python -y
       script:
-        - bash $TRAVIS_BUILD_DIR/.travis/bump_version.sh && npm run build && npm run package-win
+        - bash $TRAVIS_BUILD_DIR/.travis/build.sh
       deploy:
         skip_cleanup: true
         provider: script
