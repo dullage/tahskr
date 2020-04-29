@@ -4,8 +4,8 @@ set -ev
 
 target_branch=feature/travis-builds
 
-git config --global user.email "travis@travis-ci.com"
-git config --global user.name "Travis CI"
+git config user.email "travis@travis-ci.com"
+git config user.name "Travis CI"
 
 git checkout $target_branch
 
