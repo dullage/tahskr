@@ -19,7 +19,8 @@ if: (env(TRAVIS_TAG) IS NOT present AND env(TRAVIS_COMMIT_MESSAGE) !~ env(VERSIO
 install: skip
 
 script:
-  - bash $TRAVIS_BUILD_DIR/.travis/build.sh
+  - echo Skipping Build...
+  # - bash $TRAVIS_BUILD_DIR/.travis/build.sh
 
 deploy:
   - provider: script
