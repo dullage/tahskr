@@ -23,7 +23,7 @@ script:
   - npm run build
   - npm run package-win
 
-before_deploy: powershell Compress-Archive $TRAVIS_BUILD_DIR/builds/tahskr-win32-ia32/* $TRAVIS_BUILD_DIR/builds/tahskr.zip
+before_deploy: powershell Compress-Archive -Path $TRAVIS_BUILD_DIR/builds/tahskr-win32-ia32/* -DestinationPath $TRAVIS_BUILD_DIR/builds/tahskr.zip
 
 deploy:
   - provider: script
