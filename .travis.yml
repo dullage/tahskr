@@ -14,42 +14,25 @@ env:
 #   - GITHUB_TOKEN
 #   - DEPLOY_TARGET_DIR
 
-#   - DEPLOY_SCRIPT_DEV
-#   - DEPLOY_SCRIPT_PROD
+if: ((env(TRAVIS_TAG) IS NOT present AND env(TRAVIS_COMMIT_MESSAGE) !~ env(VERSION_BUMP_MESSAGE_PREFIX) OR env(TRAVIS_TAG) IS present))
 
-if: tag IS NOT present
+install: skip
 
-stages:
-  # - name: Bump Version
-  #   if: branch = master && type = push && commit_message !~ env(VERSION_BUMP_MESSAGE_PREFIX)
+script:
+  - bash $TRAVIS_BUILD_DIR/.travis/build.sh
 
-  - name: Test Build
-    if: commit_message !~ env(VERSION_BUMP_MESSAGE_PREFIX)
-
-  # - name: Build & Deploy Prod
-  #   if: branch = master && type = push && commit_message =~ env(VERSION_BUMP_MESSAGE_PREFIX)
-
-  # - name: Build & Deploy Dev
-  #   if: branch = develop && type = push
-
-jobs:
-  include:
-    # - stage: Bump Version
-    #   script: bash ./.travis/bump_version.sh
-
-    - stage: Test Build
-      install: skip
-      script:
-        - bash $TRAVIS_BUILD_DIR/.travis/build.sh
-      deploy:
-        skip_cleanup: true
-        provider: script
-        script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
-        on:
-          branch: feature/travis-builds
-
-    # - stage: Build & Deploy Prod
-    #   script: bash ./.travis/build.sh prod
-
-    # - stage: Build & Deploy Dev
-    #   script: bash ./.travis/build.sh dev
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: bash $TRAVIS_BUILD_DIR/.travis/bump_version.sh
+    on:
+      #repo: env(GIT_REPO_SLUG)
+      branch: feature/travis-builds
+      tags: false
+  - provider: script
+    skip_cleanup: true
+    script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
+    on:
+      #repo: env(GIT_REPO_SLUG)
+      branch: feature/travis-builds
+      tags: true

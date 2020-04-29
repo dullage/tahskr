@@ -16,7 +16,7 @@ version=$(cat package.json | jq -r ".version")
 git add .
 git commit -m "$VERSION_BUMP_MESSAGE_PREFIX $VERSION"
 
-#git tag -a $version -m "$version"
+git tag -a $version -m "$version"
 
 git remote add origin-authenticated https://${GITHUB_TOKEN}@github.com/$GIT_REPO_SLUG.git
 git push --set-upstream origin-authenticated --follow-tags $target_branch
