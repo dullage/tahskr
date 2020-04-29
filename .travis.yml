@@ -19,7 +19,11 @@ if: (tag IS blank AND commit_message !~ env(VERSION_BUMP_MESSAGE_PREFIX)) OR (ta
 install: skip
 
 script:
-  - bash $TRAVIS_BUILD_DIR/.travis/build.sh
+  - npm ci
+  - npm run build
+  - npm run package-win
+
+before_deploy: powershell Compress-Archive $TRAVIS_BUILD_DIR/tahskr-win32-ia32/* $TRAVIS_BUILD_DIR/tahskr.zip
 
 deploy:
   - provider: script
