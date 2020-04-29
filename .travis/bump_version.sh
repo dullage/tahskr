@@ -14,7 +14,7 @@ python $TRAVIS_BUILD_DIR/.travis/bump_version.py package.json package-lock.json
 version=$(cat package.json | jq -r ".version")
 
 git add .
-git commit -m "$VERSION_BUMP_MESSAGE_PREFIX $VERSION"
+git commit -m "$VERSION_BUMP_MESSAGE_PREFIX $version"
 
 git tag -a $version -m "$version"
 
