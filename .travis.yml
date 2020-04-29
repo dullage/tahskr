@@ -19,21 +19,18 @@ if: (tag IS blank AND commit_message !~ env(VERSION_BUMP_MESSAGE_PREFIX)) OR (ta
 install: skip
 
 script:
-  - echo Skipping Build...
-  # - bash $TRAVIS_BUILD_DIR/.travis/build.sh
+  - bash $TRAVIS_BUILD_DIR/.travis/build.sh
 
 deploy:
   - provider: script
     skip_cleanup: true
     script: bash $TRAVIS_BUILD_DIR/.travis/bump_version.sh
     on:
-      #repo: env(GIT_REPO_SLUG)
       branch: feature/travis-builds
       tags: false
   - provider: script
     skip_cleanup: true
     script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
     on:
-      #repo: env(GIT_REPO_SLUG)
       branch: feature/travis-builds
       tags: true

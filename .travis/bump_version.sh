@@ -7,6 +7,10 @@ target_branch=feature/travis-builds
 git config user.email "travis@travis-ci.com"
 git config user.name "Travis CI"
 
+##########
+git status
+##########
+
 git checkout $target_branch
 
 python $TRAVIS_BUILD_DIR/.travis/bump_version.py package.json package-lock.json
