@@ -14,7 +14,8 @@ env:
 #   - GITHUB_TOKEN
 #   - DEPLOY_TARGET_DIR
 
-if: (env(TRAVIS_TAG) == "" AND env(TRAVIS_COMMIT_MESSAGE) !~ env(VERSION_BUMP_MESSAGE_PREFIX)) OR (env(TRAVIS_TAG) IS present)
+# if: (env(TRAVIS_TAG) == "" AND env(TRAVIS_COMMIT_MESSAGE) !~ env(VERSION_BUMP_MESSAGE_PREFIX)) OR (env(TRAVIS_TAG) IS present)
+if: env(TRAVIS_TAG) == ""
 
 install: skip
 
