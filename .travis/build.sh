@@ -2,10 +2,8 @@
 
 set -ev
 
-# npm ci
+npm ci
 
-# webpack
+npm run build
 
-# npm run package-win
-
-echo Build: $DEPLOY_TARGET_DIR
+npm run package-win
