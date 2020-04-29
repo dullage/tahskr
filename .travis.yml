@@ -38,6 +38,7 @@ jobs:
     #   script: bash ./.travis/bump_version.sh
 
     - stage: Test Build
+      install: skip
       script:
         - bash $TRAVIS_BUILD_DIR/.travis/build.sh
       deploy:
