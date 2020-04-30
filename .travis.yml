@@ -19,11 +19,13 @@ if: (tag IS blank AND commit_message !~ env(VERSION_BUMP_MESSAGE_PREFIX)) OR (ta
 install: skip
 
 script:
-  - npm ci
-  - npm run build
-  - npm run package-win
+  - echo Skipping Build...
+  # - npm ci
+  # - npm run build
+  # - npm run package-win
 
-before_deploy: 7z a $TRAVIS_BUILD_DIR/builds/tahskr.zip $TRAVIS_BUILD_DIR/builds/tahskr-win32-ia32/*
+#before_deploy: 7z a tahskr.zip $TRAVIS_BUILD_DIR/builds/tahskr-win32-ia32/*
+before_deploy: 7z a tahskr.zip $TRAVIS_BUILD_DIR/*
 
 deploy:
   - provider: script
@@ -32,9 +34,16 @@ deploy:
     on:
       branch: feature/travis-builds
       tags: false
-  - provider: script
+  # - provider: script
+  #   skip_cleanup: true
+  #   script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
+  #   on:
+  #     branch: feature/travis-builds
+  #     tags: true
+  - provider: releases
+    api_key: env(GITHUB_TOKEN)
+    file: tahskr.zip
     skip_cleanup: true
-    script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
     on:
       branch: feature/travis-builds
       tags: true
