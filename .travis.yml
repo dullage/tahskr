@@ -24,7 +24,7 @@ script:
   # - npm run build
   # - npm run package-win
 
-before_deploy: 7z a tahskr.zip $TRAVIS_BUILD_DIR/builds/tahskr-win32-ia32/*
+# before_deploy: 7z a tahskr.zip $TRAVIS_BUILD_DIR/builds/tahskr-win32-ia32/*
 
 deploy:
   # - provider: script
