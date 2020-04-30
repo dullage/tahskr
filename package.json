@@ -1,6 +1,6 @@
 {
   "name": "tahskr",
-  "version": "0.0.0.0",
+  "version": "20.4.30.0",
   "description": "A mobile responsive website and electron app to manage to-dos.",
   "main": "main.js",
   "scripts": {
