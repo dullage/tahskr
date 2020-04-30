@@ -41,7 +41,8 @@ deploy:
   #     branch: feature/travis-builds
   #     tags: true
   - provider: releases
-    api_key: env(GITHUB_TOKEN)
+    api_key:
+      secure: "DhRWdOxBzh+A6Qqb8QzoNUE+AlyQqe8vC3V5e3vhsgUI+8ajuqGPS9bJ7+xW+1LSIkEMeS7Z3D29+AUyVa6selPZ86Py19qqeg/1Vl3fWOh0qzsTuypHHia4clfOJ5GGikPrNrvj35hkcR9J24wL4Grkzr/uNDEOsiOWJe4eyi3VTY0sXE3RhinpWw3Pu4JABp81jnCAhOo2WVrQgXsmTTpSNiZGE7xAzeNMkHOpnZubswjf0rSuGlSwNjUCmC17/1kiCwBLkumkdl0svvAUVIatQZ3sh1RZ28vAXj6npOy7VuNDmEeWp1lKSsxJjJJUf5fNZk9aDok6eggqBGfL5BKZZeC3fHuzVi/rTNJR8nP0PestmpkZXKYNO4rOUnrWEkOMGahGXHkKq3DUlsZuCUK29sQX9UyjVqqiyucdHczLQAEQkQZdwtATJHEy3kigP9hM4iwRzxeZDTAPinBxeDDMxfFndSne/nlxLx0o3J51gaFRutYS3JR5dGgwfJRLT3AE1t85i3RqAtnwb7Bmp5gZysPaMaAtYJ58/OVRuxk5R6xzo4QJ9YrkvaK+GSgPIwrV5SmF1CDJkLyYhftHimAILi8UZgF7CMoDy/HMCaIeXLakg/iQYugL/IxyHJAzqDtjXnPg9aJMHGirr0O6x901rIt8vzlyCCCT8207aD4="
     file: tahskr.zip
     skip_cleanup: true
     on:
