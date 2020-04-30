@@ -2,7 +2,7 @@
 
 set -ev
 
-target_branch=feature/travis-builds
+target_branch=master
 
 git config user.email "travis@travis-ci.com"
 git config user.name "Travis CI"
