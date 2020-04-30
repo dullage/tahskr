@@ -32,19 +32,22 @@ deploy:
     skip_cleanup: true
     script: bash $TRAVIS_BUILD_DIR/.travis/bump_version.sh
     on:
+      repo: Dullage/tahskr
       branch: feature/travis-builds
       tags: false
   # - provider: script
   #   skip_cleanup: true
   #   script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
   #   on:
+  #     repo: Dullage/tahskr
   #     branch: feature/travis-builds
   #     tags: true
   - provider: releases
-    api_key:
-      secure: "aQs+yzySdtGstaqZ+hLDOcsS0vxj0EDJ+nTqP+G1Ef3GldNbE1CyFBN04F7wLatTTuHKggykd2HZg8tIxBImY6kn/pm1rXyEq+sb93e/VH9mku6XklwiTyFNGNY0Y0HFpHsdZHGdKyF/GFVG/QbubJ2McnbEnOyWDB2BQ7McHPFvU8LoLbgl7hI0Ojv9Tjgc8LqgsSiNXMvZ9Qjhytn44TWSAAzcV2MsLzbHOkcJzCLZTCmitSIq+y7LT/SZ6TazUUr9+3ILrlZxaZvVtS5T5V3GoCO4g2FI25ooLog/dktxSsXRgy1se8VieXoqbl3kixMWCMwQc+UNJkge5NuSJQcvGoMI2TZUjm0VpESRcPyAGldsSl5TKGfhq4KpiEph1KuLy5cKf05bc8I8MDiP5Xxw63pDiGnj/0OMi9xp0hJ+C+Y1zuyEMVJ6VWBI5Ru+JM+dSKwbD1J1N797I6txkC8ruOQA+zr/h/N0OpZEZVxNPDHhqLS9bU75LDCRKvjVV5tSyIHZKrXGfQ4qG55cwmywedWpP7/JORxR9yDeSlKPEztV0YwY/pte5kgVEr5kESMUmjZ++v5pGTgyJnQ8ewQuWWkfoADsI0F1FiFZjUHeg0r3CdgiG8MV3dJyP8Y8eR2RBl0iplcuhBF/c61LPvkkFjiDLhuKZrqMiZND6Sg="
-    file: tahskr.zip
     skip_cleanup: true
+    api_key:
+      secure: nlPdsz0m/8jLOZrwB6Mo0XcqTFG+sFGVZxTHu6Kq+lKBtkKY2eAUXOJJBFIGRHi/DBOKFsT3NJyVroJ62ZSCba1UAE5bfsHaJzt7s+cMyi8q/pRzjQ8DMh7j//3cq6fEbahfFjuRg3i7h4Hy0z+c4Hj+8yTmKKX64In23uhmoQTnwM2zxr9sktyVZ+8sYc$
+    file: tahskr.zip
     on:
+      repo: Dullage/tahskr
       branch: feature/travis-builds
       tags: true
