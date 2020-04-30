@@ -37,6 +37,7 @@ deploy:
     skip_cleanup: true
     on:
       repo: Dullage/tahskr
+      all_branches: true
       condition: $TRAVIS_BRANCH == "develop" || $TRAVIS_TAG != ""
     script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
   - provider: releases
