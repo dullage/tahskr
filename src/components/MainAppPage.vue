@@ -1,7 +1,7 @@
 <template>
   <div class="main-app" @click="closeMenu">
     <div class="top-bar">
-      <logo :showSubtitle="false" :blink="true" />
+      <logo :show-subtitle="false" />
     </div>
 
     <div class="content-area" :class="{ 'detail-view-open': detailViewOpen }">
@@ -407,7 +407,7 @@ export default {
   background-color: $bgColor;
   border-bottom: 2px solid $bgLightColor;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   @media #{$mobile} {
     justify-content: center;
   }

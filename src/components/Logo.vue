@@ -1,15 +1,21 @@
 <template>
   <div class="logo">
     <div class="title">
-      <span class="brand-oranges">tah</span><span class="brand-oranges">skr</span><span class="brand-orange" :class="{ cursor: blink }">_</span>
+    <img v-if="showLogo" src="favicon.svg" />
+      <span>tahskr</span>
+      <span class="brand-orange" :class="{ cursor: blink }">_</span>
     </div>
-    <div class="subtitle" v-if="showSubtitle">[task-er] n. yet another todo app</div>
+    <div class="subtitle" v-if="showSubtitle">[task-er] n. the self-hosted todo app</div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
+    showLogo: {
+      type: Boolean,
+      default: true
+    },
     showSubtitle: {
       type: Boolean,
       default: true
@@ -34,6 +40,13 @@ export default {
 
   .title {
     font-size: 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  img {
+    height: 46px;
+    margin-right: 6px;
   }
 
   @keyframes blink {
