@@ -5,6 +5,7 @@ const api = axios.create();
 
 api.interceptors.response.use(
   function(response) {
+    EventBus.$emit("communication-error", false);
     return response;
   },
   function(error) {
@@ -14,7 +15,7 @@ api.interceptors.response.use(
     ) {
       EventBus.$emit("logout");
     } else {
-      EventBus.$emit("communication-error");
+      EventBus.$emit("communication-error", true);
     }
     return Promise.reject(error);
   }

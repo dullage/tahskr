@@ -5,20 +5,30 @@
 
       <div id="login-form">
         <form @submit.prevent="submit()">
+          <!-- Server Address -->
+          <div class="server-address">
+            <input
+              type="url"
+              id="server-address"
+              v-model="serverAddress"
+              placeholder="Server Address"
+              required
+            />
+            <div
+              v-if="serverAddress != null"
+              class="button"
+              title="Clear and forget Server Address"
+              @click="clearServerAddress"
+            >
+              <link-variant-remove-icon title="Clear and forget Server Address" />
+            </div>
+          </div>
+
           <!-- Username -->
           <input type="text" id="username" v-model="username" placeholder="Username" required />
 
           <!-- Password -->
           <input type="password" id="password" v-model="password" placeholder="Password" required />
-
-          <!-- Server Address -->
-          <input
-            type="url"
-            id="serverAddress"
-            v-model="serverAddress"
-            placeholder="Server Address"
-            required
-          />
 
           <div id="remember-me">
             <check-box
@@ -31,7 +41,7 @@
           </div>
 
           <div id="submit-button">
-            <button type="submit">
+            <button type="submit" class="button">
               <login-variant-icon />Log In
             </button>
           </div>
@@ -45,11 +55,13 @@
 <script>
 import api from "../api";
 import CheckBox from "./CheckBox.vue";
+import LinkVariantRemoveIcon from "icons/LinkVariantRemove.vue";
 import LoginVariantIcon from "icons/LoginVariant.vue";
 import Logo from "./Logo.vue";
 
 export default {
   components: {
+    LinkVariantRemoveIcon,
     LoginVariantIcon,
     CheckBox,
     Logo
@@ -57,7 +69,7 @@ export default {
 
   data: function() {
     return {
-      serverAddress: "https://api.tahskr.com",
+      serverAddress: null,
       username: null,
       password: null,
       remember: false,
@@ -68,6 +80,11 @@ export default {
   methods: {
     toggleRemember: function() {
       this.remember = !this.remember;
+    },
+
+    clearServerAddress: function() {
+      localStorage.removeItem("serverAddress");
+      this.serverAddress = null;
     },
 
     submit: function() {
@@ -94,6 +111,10 @@ export default {
           parent.password = null;
         });
     }
+  },
+
+  created: function() {
+    this.serverAddress = localStorage.getItem("serverAddress");
   }
 };
 </script>
@@ -118,14 +139,10 @@ export default {
   }
 }
 
-.logo {
-  margin: 0 0 50px 0;
-}
-
 input[type="url"],
 input[type="text"],
 input[type="password"] {
-  margin: 8px 0;
+  margin-bottom: 8px;
   display: block;
   padding: 0 16px;
   border: none;
@@ -142,6 +159,17 @@ input[type="password"] {
       color: transparent;
     }
   }
+}
+
+.server-address {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.link-variant-remove-icon {
+  margin: 0 8px 8px 8px;
 }
 
 #remember-me {
@@ -162,7 +190,7 @@ input[type="password"] {
   margin: 12px 0;
 }
 
-button {
+.button {
   border: none;
   background: none;
   color: $offWhite;
