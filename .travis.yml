@@ -6,7 +6,6 @@ node_js:
 env:
   global:
     - "GIT_REPO_SLUG=Dullage/tahskr"
-    - "VERSION_BUMP_MESSAGE_PREFIX='Travis CI: Bump version to'"
 # secret:
 #   - DEPLOY_HOST_IP
 #   - encrypted_7df0bf92a043_iv
@@ -14,12 +13,9 @@ env:
 #   - GITHUB_TOKEN
 #   - DEPLOY_TARGET_DIR
 
-if: (tag IS blank AND commit_message !~ env(VERSION_BUMP_MESSAGE_PREFIX)) OR (tag IS present)
-
-install: skip
+install: npm ci
 
 script:
-  - npm ci
   - npm run build
   - npm run package-win
 
@@ -32,7 +28,8 @@ deploy:
       repo: Dullage/tahskr
       branch: master
       tags: false
-    script: bash $TRAVIS_BUILD_DIR/.travis/bump_version.sh
+    script: bash $TRAVIS_BUILD_DIR/.travis/tag.sh
+
   - provider: script
     skip_cleanup: true
     on:

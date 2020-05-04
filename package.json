@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/Dullage/tahskr/issues"
   }, 
-  "version": "20.5.4.0", 
+  "version": "2.0.0", 
   "dependencies": {
     "custom-electron-titlebar": "^3.2.2-hotfix62"
   }, 
