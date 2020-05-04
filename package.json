@@ -1,49 +1,49 @@
 {
-  "license": "MIT", 
-  "name": "tahskr", 
+  "name": "tahskr",
+  "version": "20.4.30.1",
+  "description": "A mobile responsive website and electron app to manage to-dos.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1",
+    "start": "webpack && electron .",
+    "serve": "webpack-dev-server --open",
+    "build": "webpack",
+    "package-win": "webpack && electron-packager . --overwrite --asar --platform=win32 --arch=ia32 --icon=src/icons/favicon.ico --prune=true --out=builds --ignore=^/src"
+  },
   "repository": {
-    "url": "git+https://github.com/Dullage/tahskr.git", 
-    "type": "git"
-  }, 
-  "author": "Adam Dullage", 
+    "type": "git",
+    "url": "git+https://github.com/Dullage/tahskr.git"
+  },
+  "author": "Adam Dullage",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Dullage/tahskr/issues"
-  }, 
-  "version": "20.4.30.1", 
+  },
+  "homepage": "https://github.com/Dullage/tahskr#readme",
   "dependencies": {
     "custom-electron-titlebar": "^3.2.2-hotfix62"
-  }, 
-  "scripts": {
-    "test": "echo \\\"Error: no test specified\\\" && exit 1", 
-    "start": "webpack && electron .", 
-    "serve": "webpack-dev-server --open", 
-    "build": "webpack", 
-    "package-win": "webpack && electron-packager . --overwrite --asar --platform=win32 --arch=ia32 --icon=src/icons/favicon/favicon.ico --prune=true --out=builds --ignore=^/src"
-  }, 
+  },
   "devDependencies": {
-    "sass-loader": "^8.0.0", 
-    "axios": "^0.19.0", 
-    "autoprefixer": "^9.7.4", 
-    "webpack-cli": "^3.3.9", 
-    "vue-loader": "^15.7.1", 
-    "v-calendar": "^1.0.0-beta.22", 
-    "copy-webpack-plugin": "^5.1.1", 
-    "css-loader": "^3.2.0", 
-    "vue-style-loader": "^4.1.2", 
-    "webpack": "^4.41.0", 
-    "html-webpack-plugin": "^3.2.0", 
-    "electron": "^6.0.10", 
-    "vue": "^2.6.10", 
-    "webpack-dev-server": "^3.8.2", 
-    "vue-template-compiler": "^2.6.10", 
-    "@hapi/joi": "^16.1.7", 
-    "electron-packager": "^14.2.1", 
-    "node-sass": "^4.13.0", 
-    "postcss-loader": "^3.0.0", 
-    "vue-material-design-icons": "^4.1.0", 
-    "vuedraggable": "^2.23.2"
-  }, 
-  "main": "main.js", 
-  "homepage": "https://github.com/Dullage/tahskr#readme", 
-  "description": "A mobile responsive website and electron app to manage to-dos."
+    "@hapi/joi": "^16.1.7",
+    "autoprefixer": "^9.7.4",
+    "axios": "^0.19.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "css-loader": "^3.2.0",
+    "electron": "^6.0.10",
+    "electron-packager": "^14.2.1",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.13.0",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^8.0.0",
+    "v-calendar": "^1.0.0-beta.22",
+    "vue": "^2.6.10",
+    "vue-loader": "^15.7.1",
+    "vue-material-design-icons": "^4.1.0",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.10",
+    "vuedraggable": "^2.23.2",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2"
+  }
 }

@@ -52,8 +52,8 @@ export default {
     login: function(serverAddress, token, remember) {
       this.auth.token = token.token;
       this.auth.userId = token.userId;
+      localStorage.setItem("serverAddress", serverAddress);
       if (remember == true) {
-        localStorage.setItem("serverAddress", serverAddress);
         localStorage.setItem("token", token.token);
         localStorage.setItem("userId", token.userId);
       }
@@ -61,7 +61,6 @@ export default {
     },
 
     logout: function() {
-      localStorage.removeItem("serverAddress");
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
       this.auth.token = null;
@@ -76,8 +75,8 @@ export default {
     this.loadSavedAuth();
 
     var parent = this;
-    EventBus.$on("communication-error", function() {
-      parent.communicationError = true;
+    EventBus.$on("communication-error", function(val) {
+      parent.communicationError = val;
     });
 
     EventBus.$on("logout", this.logout);
