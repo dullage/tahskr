@@ -8,8 +8,16 @@ then
     version=$(cat $TRAVIS_BUILD_DIR/package.json | jq -r ".version")
     echo Extracted Version Number: $version
 
-    git config user.email "travis@travis-ci.com"
-    git config user.name "Travis CI"
+    # See if any tags already match the version
+    existing_tag_count=$(git tag | grep $version | wc -l)
 
-    git tag -a "$version" -m "$version"
+    if [[ $existing_tag_count == 0 ]]
+    then
+        git config user.email "travis@travis-ci.com"
+        git config user.name "Travis CI"
+
+        git tag -a "$version" -m "$version"
+    else
+        echo "Skipping tag script as already run..."
+    fi
 fi
