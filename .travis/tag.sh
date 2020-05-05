@@ -1,19 +1,18 @@
 #!/bin/bash
 
+# - The build must only be tagged once therefore this script cannot run in the before_deploy phase.
+# - The build must fail (and not deploy) if the tag already exists (indicating the version hasn't been bumped) therefore this script cannot run in the after_success phase.
+# - No deployments should happen if the tag already exists therefor this script cannot run as a deploy phase.
+
 set -ev
 
-# Deployments (and therefore this script) also run on the develop branch but we only want to tag on master
-if [[ $TRAVIS_BRANCH == "master" ]]
+if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_EVENT_TYPE == "push" ]]
 then
     # Extract the version from the package.json file
     version=$(cat $TRAVIS_BUILD_DIR/package.json | jq -r ".version")
     echo Extracted Version Number: $version
 
-    # Fetch all tags from the remote
-    git fetch --tags
-
     # See if any tags already match the version
-    git tag
     existing_tag_count=$(git tag | grep $version | wc -l)
     echo $existing_tag_count
 
