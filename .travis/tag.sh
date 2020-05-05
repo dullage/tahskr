@@ -9,6 +9,8 @@ then
 
     git fetch --tags
 
+    git rev-parse "$version"
+
     # Check if tag already exists with version number 
     if git rev-parse "$version" >/dev/null 2>&1
     then
