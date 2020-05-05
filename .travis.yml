@@ -11,6 +11,7 @@ env:
 #   - DEPLOY_TARGET_DIR
 #   - encrypted_7df0bf92a043_iv
 #   - encrypted_7df0bf92a043_key
+#   - GITHUB_TOKEN
 
 if: tag IS NOT present
 

@@ -14,14 +14,16 @@ then
 
     # See if any tags already match the version
     existing_tag_count=$(git tag | grep $version | wc -l)
-    echo $existing_tag_count
 
     if [[ $existing_tag_count == 0 ]]
     then
         git config user.email "travis@travis-ci.com"
         git config user.name "Travis CI"
 
+        git remote add origin-authenticated https://${GITHUB_TOKEN}@github.com/$GIT_REPO_SLUG.git
+
         git tag -a "$version" -m "$version"
+        git push origin-authenticated --tags
     else
         echo "Tag already exists for this version!"
         exit 1
