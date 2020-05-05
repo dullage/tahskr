@@ -13,7 +13,9 @@ then
     git fetch --tags
 
     # See if any tags already match the version
+    git tag
     existing_tag_count=$(git tag | grep $version | wc -l)
+    echo $existing_tag_count
 
     if [[ $existing_tag_count == 0 ]]
     then
