@@ -5,7 +5,7 @@ set -ev
 if [[ $TRAVIS_BRANCH == "develop" ]]
 then
     deploy_env=dev
-elif [[ $TRAVIS_TAG != "" ]]
+elif [[ $TRAVIS_BRANCH == "master" ]]
 then
     deploy_env=prod
 else
