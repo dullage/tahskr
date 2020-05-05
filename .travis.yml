@@ -20,7 +20,9 @@ script:
   - npm run build
   - npm run package-win
 
-before_deploy: 7z a tahskr.zip $TRAVIS_BUILD_DIR/builds/tahskr-win32-ia32/*
+before_deploy:
+  - 7z a tahskr.zip $TRAVIS_BUILD_DIR/builds/tahskr-win32-ia32/*
+  - bash $TRAVIS_BUILD_DIR/.travis/tag.sh
 
 deploy:
   - provider: script
@@ -30,14 +32,6 @@ deploy:
       all_branches: true
       condition: $TRAVIS_BRANCH == master || $TRAVIS_BRANCH == develop
     script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
-
-  - provider: script
-    skip_cleanup: true
-    on:
-      repo: Dullage/tahskr
-      branch: master
-    script: bash $TRAVIS_BUILD_DIR/.travis/tag.sh
-
   - provider: releases
     skip_cleanup: true
     on:
