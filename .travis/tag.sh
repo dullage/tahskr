@@ -4,7 +4,9 @@ set -ev
 
 if [[ $TRAVIS_BRANCH == "master" ]]
 then
-    version=$(cat package.json | jq -r ".version")
+    version=$(cat $TRAVIS_BUILD_DIR/package.json | jq -r ".version")
+    echo Extracted Version Number: $version
+
     git fetch --tags
 
     # Check if tag already exists with version number 
