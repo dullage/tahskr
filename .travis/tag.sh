@@ -2,12 +2,20 @@
 
 set -ev
 
-git config user.email "travis@travis-ci.com"
-git config user.name "Travis CI"
+if [[ $TRAVIS_BRANCH == "master" ]]
+then
+    version=$(cat package.json | jq -r ".version")
+    git fetch --tags
 
-version=$(cat package.json | jq -r ".version")
+    # Check if tag already exists with version number 
+    if git rev-parse "$version" >/dev/null 2>&1
+    then
+        echo "Tag already exists for this version!"
+        exit 1
+    else
+        git config user.email "travis@travis-ci.com"
+        git config user.name "Travis CI"
 
-git tag -a "$version" -m "$version"
-
-git remote add origin-authenticated https://${GITHUB_TOKEN}@github.com/$GIT_REPO_SLUG.git
-git push origin-authenticated --tags
+        git tag -a "$version" -m "$version"
+    fi
+fi

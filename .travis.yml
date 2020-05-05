@@ -8,10 +8,11 @@ env:
     - "GIT_REPO_SLUG=Dullage/tahskr"
 # secret:
 #   - DEPLOY_HOST_IP
+#   - DEPLOY_TARGET_DIR
 #   - encrypted_7df0bf92a043_iv
 #   - encrypted_7df0bf92a043_key
-#   - GITHUB_TOKEN
-#   - DEPLOY_TARGET_DIR
+
+if: tag IS NOT present
 
 install: npm ci
 
@@ -19,30 +20,23 @@ script:
   - npm run build
   - npm run package-win
 
-before_deploy: 7z a tahskr.zip $TRAVIS_BUILD_DIR/builds/tahskr-win32-ia32/*
+before_deploy:
+  - 7z a tahskr.zip $TRAVIS_BUILD_DIR/builds/tahskr-win32-ia32/*
+  - bash $TRAVIS_BUILD_DIR/.travis/tag.sh
 
 deploy:
   - provider: script
     skip_cleanup: true
     on:
       repo: Dullage/tahskr
-      branch: master
-      tags: false
-    script: bash $TRAVIS_BUILD_DIR/.travis/tag.sh
-
-  - provider: script
-    skip_cleanup: true
-    on:
-      repo: Dullage/tahskr
       all_branches: true
-      condition: $TRAVIS_BRANCH == "develop" || $TRAVIS_TAG != ""
+      condition: $TRAVIS_BRANCH IN ("master", "develop")
     script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
   - provider: releases
     skip_cleanup: true
     on:
       repo: Dullage/tahskr
       branch: master
-      tags: true
     api_key:
       secure: "n0CblobwRUs4ovpPm48eB0ZaO6cVkMhTBRaA9TgI0mpvKTOmkuBO+lPW6QH5kM90YtRd1o3SgrE32np3YPt0Y3L41bm1cCEO5KTC5noFjKSmiS8SXLVI5TdwQfI4q7/nydXf8mt0BfD2ZyyOLk8BXCuGSjPV5q8br/ujC4TrQvLIHvaLiR3xYHX+8S4e9RAvRfe8xm0Az7eoCUFbTwWer0Tc+XBAM2N+A/cD7dlHBNzuaP1IC+gTlL1goLJ23PU5zvtjGps2JgxdY+LpRJREolspvyU4jJdVRkn7c5H9hiuqGo7nrjYdu+pYUv+IFLie7k/4BueDK1Yc3q7dcHkTMjM9aYutFNJQ1bnKrox3VustaD1/JauVnykiyGEEVwdW9SasoSe8Z/sKaR7/hxoL+Y+lo4LwrEPYmdX7fvWEhKMyiW0ixW47OHQqh3/dYM2Uox/rs5gfQYwXGW/DBKr9Q/zIhNXyqQXon640PVhDIT4wqpXiDIv3HIbj19Pg/j1JWiDL4GoDEa+Vp8Yk/+EGGWroYxgpU3vigBqyZllqTT0MfBj2WCQ8mSe+uktpQwhWOnzWlfyEzKjnXesSedx8EIoG8M/GiO1zbATe45pWE1W6BboSrr/8RdKlSu6gts8VBzIWV3mnDzO8jZbg5ZDwM2IZqirGkqNBVJzWpTz+5Ls="
     file: tahskr.zip
