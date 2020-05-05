@@ -30,7 +30,7 @@ deploy:
     on:
       repo: Dullage/tahskr
       all_branches: true
-      condition: $TRAVIS_BRANCH IN ("master", "develop")
+      condition: branch IN ("master", "develop")
     script: bash $TRAVIS_BUILD_DIR/.travis/deploy.sh
   - provider: releases
     skip_cleanup: true
