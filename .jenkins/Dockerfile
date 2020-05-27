@@ -7,6 +7,7 @@ RUN apt update && apt install -y \
     jq \
     curl \
     file \
+    rsync \
  && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT /bin/bash
