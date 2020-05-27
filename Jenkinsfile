@@ -35,7 +35,7 @@ pipeline {
             }
             steps {
                 unstash 'Builds'
-                sh 'unzip tahskr-web.zip -d $WORKSPACE/dist'
+                sh 'unzip -o tahskr-web.zip -d $WORKSPACE/dist'
                 sh 'rsync -r --delete --perms --chmod=775 -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $WORKSPACE/dist/ jenkins@$DEPLOY_IP:~/tahskr/$BRANCH_NAME'
             }
         }
