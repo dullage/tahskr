@@ -21,6 +21,7 @@
         delay-on-touch-only="true"
         touch-start-threshold="3"
         force-fallback="true"
+        filter=".no-drag"
       >
         <!-- <transition-group name="drag"> -->
         <Todo

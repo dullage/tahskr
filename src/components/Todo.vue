@@ -5,12 +5,12 @@
     @click="select"
   >
     <div class="todo-left">
-      <check-box class="check-box" :checked="completed" @toggled="toggleCompleted" />
+      <check-box class="check-box no-drag" :checked="completed" @toggled="toggleCompleted" />
       <span class="summary">{{ summary }}</span>
     </div>
 
     <div class="todo-right">
-      <div class="important-button" title="Toggle Important" @click.stop="toggleImportant">
+      <div class="important-button no-drag" title="Toggle Important" @click.stop="toggleImportant">
         <alert-circle-outline-icon title="Toggle Important" />
       </div>
       <div v-show="snoozeDatetime != null && snoozeDatetime > Date.now()" class="snoozed-label">
