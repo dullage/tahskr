@@ -19,6 +19,7 @@
           class="summary"
           type="text"
           v-model="summaryInput"
+          @keyup.enter="saveSummary"
         />
         <div v-show="editSummaryMode">
           <content-save-icon class="clickable" @click="saveSummary" />
