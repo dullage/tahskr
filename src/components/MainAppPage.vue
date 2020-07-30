@@ -41,6 +41,7 @@
           :important="selectedTodo.important"
           :snoozeDatetime="selectedTodo.snoozeDatetime"
           :created="selectedTodo.created"
+          :notes="selectedTodo.notes"
         />
       </div>
     </div>
@@ -72,14 +73,14 @@ export default {
     TodoDetailView,
     draggable,
     Logo,
-    TodoList
+    TodoList,
   },
 
   props: {
-    auth: { type: Object, required: true }
+    auth: { type: Object, required: true },
   },
 
-  data: function() {
+  data: function () {
     return {
       user: null,
       stagedTodoLists: null,
@@ -88,62 +89,62 @@ export default {
       db: [],
       showCompleted: false,
       showSnoozed: false,
-      selectedTodoId: null
+      selectedTodoId: null,
     };
   },
 
   computed: {
-    detailViewOpen: function() {
+    detailViewOpen: function () {
       return this.selectedTodoId != null;
     },
 
-    selectedTodo: function() {
+    selectedTodo: function () {
       if (this.selectedTodoId == null) {
         return null;
       } else {
         var [listIndex, todoIndex] = this.todoIndexById(this.selectedTodoId);
         return this.db[listIndex].todos[todoIndex];
       }
-    }
+    },
   },
 
   watch: {
-    showCompleted: function(newValue) {
+    showCompleted: function (newValue) {
       if (newValue == true) {
         this.refreshAll();
       }
     },
 
-    showSnoozed: function(newValue) {
+    showSnoozed: function (newValue) {
       if (newValue == true) {
         this.refreshAll();
       }
-    }
+    },
   },
 
   methods: {
-    closeMenu: function() {
+    closeMenu: function () {
       EventBus.$emit("close-menu");
     },
 
-    getUser: function() {
+    getUser: function () {
       var parent = this;
-      api.get(`/user/${this.auth.userId}`).then(function(r) {
+      api.get(`/user/${this.auth.userId}`).then(function (r) {
         r.data.config = configSchema.validate(r.data.config).value;
         parent.user = r.data;
         parent.dataLoadedCheck();
       });
     },
 
-    getTodoLists: function() {
+    getTodoLists: function () {
       var parent = this;
-      api.get("/todolist").then(function(r) {
+      api.get("/todolist").then(function (r) {
         parent.stagedTodoLists = r.data;
         parent.dataLoadedCheck();
       });
     },
 
-    getTodos: function() {
+    getTodos: function () {
       var parent = this;
       var completedOption = false;
 
@@ -155,11 +156,11 @@ export default {
         .get("/todo", {
           params: {
             completed: completedOption,
-            excludeSnoozed: !this.showSnoozed
-          }
+            excludeSnoozed: !this.showSnoozed,
+          },
         })
-        .then(function(r) {
-          r.data.forEach(function(todo) {
+        .then(function (r) {
+          r.data.forEach(function (todo) {
             todo.created = new Date(todo.created);
             if (todo.completedDatetime != null) {
               todo.completedDatetime = new Date(todo.completedDatetime);
@@ -173,7 +174,7 @@ export default {
         });
     },
 
-    refreshAll: function() {
+    refreshAll: function () {
       this.loading = true;
       this.selectedTodoId = null;
       this.db.splice(0, this.db.length);
@@ -182,7 +183,7 @@ export default {
       this.getTodos();
     },
 
-    dataLoadedCheck: function() {
+    dataLoadedCheck: function () {
       if (
         this.user != null &&
         this.stagedTodoLists != null &&
@@ -192,7 +193,7 @@ export default {
       }
     },
 
-    processStagedData: function() {
+    processStagedData: function () {
       var parent = this;
 
       // Add default Inbox list
@@ -205,13 +206,13 @@ export default {
       this.sortTodoLists(this.stagedTodoLists, this.user.config.todoListOrder);
 
       // Add user lists
-      this.stagedTodoLists.forEach(function(value) {
+      this.stagedTodoLists.forEach(function (value) {
         value.todos = [];
         parent.db.push(value);
       });
 
       // Add todos
-      this.stagedTodos.forEach(function(value) {
+      this.stagedTodos.forEach(function (value) {
         var listIndex;
         if (value.listId != null) {
           listIndex = parent.listIndexById(value.listId);
@@ -226,13 +227,13 @@ export default {
       this.stagedTodos = null;
     },
 
-    listIndexById: function(targetId) {
-      return this.db.findIndex(function(list) {
+    listIndexById: function (targetId) {
+      return this.db.findIndex(function (list) {
         return list.id == targetId;
       });
     },
 
-    todoIndexById: function(targetId) {
+    todoIndexById: function (targetId) {
       for (var [listIndex, list] of Object.entries(this.db)) {
         for (var [todoIndex, todo] of Object.entries(list.todos)) {
           if (todo.id == targetId) {
@@ -242,7 +243,7 @@ export default {
       }
     },
 
-    sortByStoredOrder: function(a, b, storedOrder) {
+    sortByStoredOrder: function (a, b, storedOrder) {
       let aIndex = storedOrder.indexOf(a.id);
       let bIndex = storedOrder.indexOf(b.id);
 
@@ -264,16 +265,16 @@ export default {
       }
     },
 
-    sortTodoLists: function(toSort, order) {
+    sortTodoLists: function (toSort, order) {
       let parent = this;
-      toSort.sort(function(a, b) {
+      toSort.sort(function (a, b) {
         return parent.sortByStoredOrder(a, b, order);
       });
     },
 
-    sortTodos: function(toSort, order) {
+    sortTodos: function (toSort, order) {
       let parent = this;
-      toSort.sort(function(a, b) {
+      toSort.sort(function (a, b) {
         // Sort incomplete first by importance then by user config
         if (a.completedDatetime == null && b.completedDatetime == null) {
           // Same importance
@@ -307,22 +308,22 @@ export default {
       });
     },
 
-    sortListByIndex: function(listIndex) {
+    sortListByIndex: function (listIndex) {
       this.sortTodos(this.db[listIndex].todos, this.user.config.todoOrder);
     },
 
-    getTodoListOrder: function() {
+    getTodoListOrder: function () {
       var order = [];
-      this.db.forEach(function(list) {
+      this.db.forEach(function (list) {
         order.push(list.id);
       });
       return order;
     },
 
-    getTodoOrder: function() {
+    getTodoOrder: function () {
       var order = [];
-      this.db.forEach(function(list) {
-        list.todos.forEach(function(todo) {
+      this.db.forEach(function (list) {
+        list.todos.forEach(function (todo) {
           if (todo.completedDatetime == null) {
             order.push(todo.id);
           }
@@ -331,56 +332,69 @@ export default {
       return order;
     },
 
-    postConfig: function() {
+    postConfig: function () {
       var parent = this;
       api.patch(`/user/${this.auth.userId}`, {
-        config: this.user.config
+        config: this.user.config,
       });
     },
 
-    newTodoListOrder: function() {
+    newTodoListOrder: function () {
       this.user.config.todoListOrder = this.getTodoListOrder();
       this.postConfig();
     },
 
-    newTodoOrder: function() {
+    newTodoOrder: function () {
       this.user.config.todoOrder = this.getTodoOrder();
       this.postConfig();
     },
 
-    addTodo: function(todo) {
+    addTodo: function (todo) {
       this.db[this.listIndexById(0)].todos.push(todo);
     },
 
-    logout: function() {
+    logout: function () {
       EventBus.$emit("logout");
     },
 
-    updateTodoByIndex: function(listIndex, todoIndex, updates) {
+    updateTodoByIndex: function (listIndex, todoIndex, updates) {
       var todo = this.db[listIndex].todos[todoIndex];
       Object.assign(todo, updates);
       api.patch(`/todo/${todo.id}`, updates);
       this.sortListByIndex(listIndex);
     },
 
-    updateTodoById: function(id, updates) {
+    updateTodoById: function (id, updates) {
       var [listIndex, todoIndex] = this.todoIndexById(id);
       this.updateTodoByIndex(listIndex, todoIndex, updates);
     },
 
-    selectTodo: function(selectedTodoId) {
+    deleteTodoByIndex: function (listIndex, todoIndex) {
+      var todo = this.db[listIndex].todos[todoIndex];
+      this.db[listIndex].todos.splice(todoIndex, 1);
+      this.selectedTodoId = null;
+      api.delete(`/todo/${todo.id}`)
+    },
+
+    deleteTodoById: function (id) {
+      var [listIndex, todoIndex] = this.todoIndexById(id);
+      this.deleteTodoByIndex(listIndex, todoIndex);
+    },
+
+    selectTodo: function (selectedTodoId) {
       this.selectedTodoId = selectedTodoId;
-    }
+    },
   },
 
-  created: function() {
+  created: function () {
     EventBus.$on("new-todo-order", this.newTodoOrder);
     EventBus.$on("update-todo-by-id", this.updateTodoById);
     EventBus.$on("update-todo-by-index", this.updateTodoByIndex);
+    EventBus.$on("delete-todo-by-id", this.deleteTodoById);
     EventBus.$on("select-todo", this.selectTodo);
     EventBus.$on("add-todo", this.addTodo);
     this.refreshAll();
-  }
+  },
 };
 </script>
 
