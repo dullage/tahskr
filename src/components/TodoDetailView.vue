@@ -79,13 +79,11 @@
       @blur="saveNotes"
     ></textarea>
 
-    <div>
-      <!-- Created Date -->
-      <p class="created-timestamp">Created: {{ formattedCreated }}</p>
-      
-      <!-- Delete Button -->
-      <trash-can-outline-icon class="clickable hover-button" @click="deleteTodo" />
-    </div>
+    <!-- Created Date -->
+    <p class="created-timestamp">Created: {{ formattedCreated }}</p>
+
+    <!-- Delete Button -->
+    <trash-can-outline-icon class="clickable hover-button" @click="deleteTodo" />
   </div>
 </template>
 
@@ -241,11 +239,11 @@ export default {
       });
     },
 
-    deleteTodo: function() {
+    deleteTodo: function () {
       if (window.confirm("Are you sure you want to delete this tahsk?")) {
         EventBus.$emit("delete-todo-by-id", this.todoId);
       }
-    }
+    },
   },
 
   created: function () {
@@ -316,6 +314,8 @@ input.summary {
   flex: 1 1 auto;
   white-space: pre-wrap;
   cursor: text;
+  padding: 4px 10px;
+  border: solid 2px $bgLightColor;
 }
 
 input.summary,
@@ -331,6 +331,8 @@ textarea.notes {
   resize: none;
   font-size: 16px;
   outline: none;
+  padding: 4px 10px;
+  border: solid 2px $bgLightColor;
 }
 
 .hover-button {
@@ -355,11 +357,12 @@ textarea.notes {
   color: $subduedColor;
   font-size: 0.8em;
   text-align: center;
+  margin-top: 14px;
 }
 
 .trash-can-outline-icon {
   position: absolute;
   bottom: 14px;
-  right: 1px;
+  right: 6px;
 }
 </style>
