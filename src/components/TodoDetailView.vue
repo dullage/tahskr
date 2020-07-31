@@ -44,7 +44,7 @@
     </div>
 
     <!-- Snooze -->
-    <div class="row">
+    <div class="header-row">
       <sleep-icon />
       <span>Snooze Until</span>
     </div>
@@ -60,7 +60,7 @@
     </div>
 
     <!-- Notes -->
-    <div class="row">
+    <div class="header-row">
       <span>Notes</span>
       <div v-show="!editNotesMode">
         <pencil-icon class="clickable edit-button hover-button" @click="editNotes" />
@@ -292,6 +292,12 @@ export default {
   align-items: center;
 }
 
+.header-row {
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+}
+
 .checkbox {
   margin: 0 10px 0 2px;
 }
@@ -332,7 +338,7 @@ textarea.notes {
   font-size: 16px;
   outline: none;
   padding: 4px 10px;
-  border: solid 2px $bgLightColor;
+  border: solid 2px lighten($bgLightColor, 10%);
 }
 
 .hover-button {
@@ -350,7 +356,7 @@ textarea.notes {
 
 .save-button {
   margin-left: 6px;
-  color: $brandOrange;
+  color: $offWhite;
 }
 
 .created-timestamp {
