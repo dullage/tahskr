@@ -18,7 +18,7 @@
         invert-swap="true"
         class="todos"
         delay="400"
-        delay-on-touch-only="true"
+        delay-on-touch-only="false"
         touch-start-threshold="3"
         force-fallback="true"
         filter=".no-drag"
