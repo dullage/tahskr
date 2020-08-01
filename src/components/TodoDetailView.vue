@@ -27,7 +27,7 @@
 
     <!-- Completed -->
     <div class="row">
-      <check-box :checked="completed" @toggled="toggleCompleted" />
+      <check-box :dimWhenChecked="true" :checked="completed" @toggled="toggleCompleted" />
       <span v-show="!completed" class="clickable" @click="toggleCompleted">Mark as completed</span>
       <span
         v-show="completed"
@@ -37,16 +37,17 @@
     </div>
 
     <!-- Important -->
-    <div class="row">
+    <div class="row important-row">
+      <check-box :checked="important" @toggled="toggleImportant" />
+      <span class="clickable" @click="toggleImportant">Important</span>
       <alert-circle-outline-icon class="clickable" @click="toggleImportant" />
-      <span v-show="important" class="clickable" @click="toggleImportant">Unset as Important</span>
-      <span v-show="!important" class="clickable" @click="toggleImportant">Set as Important</span>
     </div>
 
     <!-- Snooze -->
-    <div class="header-row">
-      <sleep-icon />
-      <span>Snooze Until</span>
+    <div class="header-row snooze-row">
+      <check-box :checked="snoozeDatetimeInput != null" @toggled="toggleSnooze" />
+      <span class="clickable" @click="toggleSnooze">Snooze</span>
+      <sleep-icon class="clickable" @click="toggleSnooze" />
     </div>
 
     <div class="row">
@@ -239,6 +240,16 @@ export default {
       });
     },
 
+    toggleSnooze: function () {
+      if (this.snoozeDatetimeInput == null) {
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        this.snoozeDatetimeInput = tomorrow;
+      } else {
+        this.snoozeDatetimeInput = null;
+      }
+    },
+
     deleteTodo: function () {
       if (window.confirm("Are you sure you want to delete this tahsk?")) {
         EventBus.$emit("delete-todo-by-id", this.todoId);
@@ -264,10 +275,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  .material-design-icon {
-    font-size: 17px;
-    margin-right: 8px;
-  }
 }
 
 @keyframes fadein {
@@ -293,7 +300,7 @@ export default {
 }
 
 .header-row {
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   display: flex;
   align-items: center;
 }
@@ -370,5 +377,13 @@ textarea.notes {
   position: absolute;
   bottom: 14px;
   right: 6px;
+}
+
+.important-row .material-design-icon {
+  margin: 0 0 5px 3px;
+}
+
+.snooze-row .material-design-icon {
+  margin: 0 0 5px 6px;
 }
 </style>

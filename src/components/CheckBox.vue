@@ -18,7 +18,7 @@ export default {
 
   props: {
     checked: { type: Boolean, required: true },
-    dimWhenChecked: { type: Boolean, default: true }
+    dimWhenChecked: { type: Boolean, default: false }
   },
 
   computed: {

@@ -5,7 +5,7 @@
     @click="select"
   >
     <div class="todo-left">
-      <check-box class="check-box no-drag" :checked="completed" @toggled="toggleCompleted" />
+      <check-box class="check-box no-drag" :dimWhenChecked="true" :checked="completed" @toggled="toggleCompleted" />
       <span class="summary">{{ summary }}</span>
     </div>
 

@@ -34,7 +34,6 @@
             <check-box
               class="check-box"
               :checked="remember"
-              :dimWhenChecked="false"
               @toggled="toggleRemember"
             />
             <span @click="toggleRemember">Remember Me</span>
