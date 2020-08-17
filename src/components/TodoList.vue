@@ -35,6 +35,7 @@
           :important="todo.important"
           :snooze-datetime="todo.snoozeDatetime"
           :selected-todo-id="selectedTodoId"
+          :notes="todo.notes"
           :key="todo.id"
         />
         <!-- </transition-group> -->

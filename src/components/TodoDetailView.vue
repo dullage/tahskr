@@ -78,6 +78,7 @@
       class="notes"
       id="input-notes"
       @blur="saveNotes"
+      @keyup.ctrl.enter="saveNotes"
     ></textarea>
 
     <!-- Created Date -->
@@ -329,6 +330,7 @@ input.summary {
   cursor: text;
   padding: 4px 10px;
   border: solid 2px $bgLightColor;
+  font-size: 14px;
 }
 
 input.summary,
@@ -342,7 +344,6 @@ textarea.notes {
 textarea.notes {
   flex: 1 1 auto;
   resize: none;
-  font-size: 16px;
   outline: none;
   padding: 4px 10px;
   border: solid 2px lighten($bgLightColor, 10%);
