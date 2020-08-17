@@ -25,7 +25,7 @@
       </div>
 
       <div v-show="hasNotes" class="notes-icon" title="This tahsk has notes">
-        <text-icon title="This tahsk has notes"/>
+        <text-icon title="This tahsk has notes" />
       </div>
     </div>
   </div>

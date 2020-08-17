@@ -373,7 +373,7 @@ export default {
       var todo = this.db[listIndex].todos[todoIndex];
       this.db[listIndex].todos.splice(todoIndex, 1);
       this.selectedTodoId = null;
-      api.delete(`/todo/${todo.id}`)
+      api.delete(`/todo/${todo.id}`);
     },
 
     deleteTodoById: function (id) {

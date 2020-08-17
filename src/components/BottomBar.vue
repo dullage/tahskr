@@ -54,42 +54,42 @@ export default {
     RefreshIcon,
     LogoutVariantIcon,
     ToggleSwitchIcon,
-    ToggleSwitchOffOutlineIcon
+    ToggleSwitchOffOutlineIcon,
   },
 
   props: {
     showCompleted: { type: Boolean, required: true },
-    showSnoozed: { type: Boolean, required: true }
+    showSnoozed: { type: Boolean, required: true },
   },
 
-  data: function() {
+  data: function () {
     return {
       menuOpen: false,
-      inputContent: null
+      inputContent: null,
     };
   },
 
   methods: {
-    closeMenu: function() {
+    closeMenu: function () {
       if (this.menuOpen == true) {
         this.menuOpen = false;
       }
     },
 
-    submit: function() {
+    submit: function () {
       var parent = this;
 
-      api.post("/todo", { summary: this.inputContent }).then(function(r) {
+      api.post("/todo", { summary: this.inputContent }).then(function (r) {
         r.data.created = new Date(r.data.created);
         EventBus.$emit("add-todo", r.data);
         parent.inputContent = null;
       });
-    }
+    },
   },
 
-  created: function() {
+  created: function () {
     EventBus.$on("close-menu", this.closeMenu);
-  }
+  },
 };
 </script>
 

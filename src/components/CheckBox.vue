@@ -13,25 +13,25 @@ import CheckBoldIcon from "icons/CheckBold.vue";
 
 export default {
   components: {
-    CheckBoldIcon
+    CheckBoldIcon,
   },
 
   props: {
     checked: { type: Boolean, required: true },
-    dimWhenChecked: { type: Boolean, default: false }
+    dimWhenChecked: { type: Boolean, default: false },
   },
 
   computed: {
-    dim: function() {
+    dim: function () {
       return this.checked && this.dimWhenChecked;
-    }
+    },
   },
 
   methods: {
-    toggled: function() {
+    toggled: function () {
       this.$emit("toggled");
-    }
-  }
+    },
+  },
 };
 </script>
 

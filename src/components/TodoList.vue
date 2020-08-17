@@ -55,7 +55,7 @@ export default {
   components: {
     draggable,
     Todo,
-    DragIcon
+    DragIcon,
   },
 
   props: {
@@ -64,54 +64,54 @@ export default {
     name: { type: String, required: true },
     showCompleted: { type: Boolean, required: true },
     showSnoozed: { type: Boolean, required: true },
-    selectedTodoId: { type: Number }
+    selectedTodoId: { type: Number },
   },
 
-  data: function() {
+  data: function () {
     return {
-      todos: this.$parent.$parent.db[this.listIndex].todos
+      todos: this.$parent.$parent.db[this.listIndex].todos,
     };
   },
 
   computed: {
-    countTodos: function() {
+    countTodos: function () {
       return this.todos.length;
     },
-    countIncompleteTodos: function() {
-      return this.todos.filter(todo => todo.completedDatetime == null).length;
+    countIncompleteTodos: function () {
+      return this.todos.filter((todo) => todo.completedDatetime == null).length;
     },
-    empty: function() {
+    empty: function () {
       if (this.showCompleted == true) {
         return this.countTodos == 0;
       } else {
         return this.countIncompleteTodos == 0;
       }
-    }
+    },
   },
 
   methods: {
-    newTodoOrder: function() {
+    newTodoOrder: function () {
       this.$forceUpdate();
       EventBus.$emit("new-todo-order");
     },
 
-    onChange: function(evt) {
+    onChange: function (evt) {
       if ("added" in evt) {
         this.onAdd(evt);
       }
     },
 
-    onAdd: function(evt) {
+    onAdd: function (evt) {
       this.$forceUpdate();
       var newListId = this.id;
       if (this.id == 0) {
         newListId = null;
       }
       EventBus.$emit("update-todo-by-id", evt.added.element.id, {
-        listId: newListId
+        listId: newListId,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
