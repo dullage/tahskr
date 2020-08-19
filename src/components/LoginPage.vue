@@ -44,6 +44,13 @@
         <p id="message">{{ message }}</p>
       </div>
     </div>
+
+    <!-- GitHub Logo -->
+    <div class="github-logo">
+      <a href="https://github.com/Dullage/tahskr">
+        <img src="GitHub-Mark-Light-32px.png" alt="GitHub Logo" />
+      </a>
+    </div>
   </div>
 </template>
 
@@ -198,5 +205,17 @@ input[type="password"] {
   color: $errorRed;
   font-size: 12px;
   text-align: center;
+}
+
+.github-logo {
+  @media #{$desktop} {
+    opacity: 0.2;
+    &:hover {
+      opacity: 1;
+    }
+    transition: opacity 500ms ease;
+  }
+  position: absolute;
+  bottom: 40px;
 }
 </style>
