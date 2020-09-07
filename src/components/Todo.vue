@@ -5,7 +5,12 @@
     @click="select"
   >
     <div class="todo-left">
-      <check-box class="check-box no-drag" :dimWhenChecked="true" :checked="completed" @toggled="toggleCompleted" />
+      <check-box
+        class="check-box no-drag"
+        :dimWhenChecked="true"
+        :checked="completed"
+        @toggled="toggleCompleted"
+      />
       <span class="summary">{{ summary }}</span>
     </div>
 
@@ -13,9 +18,14 @@
       <div class="important-button no-drag" title="Toggle Important" @click.stop="toggleImportant">
         <alert-circle-outline-icon title="Toggle Important" />
       </div>
+
       <div v-show="snoozeDatetime != null && snoozeDatetime > Date.now()" class="snoozed-label">
         <sleep-icon />
         <span class="snoozed-label-text">Snoozed until {{ formattedSnoozeDatetime }}</span>
+      </div>
+
+      <div v-show="hasNotes" class="notes-icon" title="This tahsk has notes">
+        <text-icon title="This tahsk has notes" />
       </div>
     </div>
   </div>
@@ -30,12 +40,14 @@ import helpers from "../helpers";
 // Icons
 import AlertCircleOutlineIcon from "icons/AlertCircleOutline.vue";
 import SleepIcon from "icons/Sleep.vue";
+import TextIcon from "icons/Text.vue";
 
 export default {
   components: {
     AlertCircleOutlineIcon,
     CheckBox,
-    SleepIcon
+    SleepIcon,
+    TextIcon,
   },
 
   props: {
@@ -46,11 +58,12 @@ export default {
     completedDatetime: { type: Date },
     important: { type: Boolean, required: true },
     snoozeDatetime: { type: Date },
-    selectedTodoId: { type: Number }
+    selectedTodoId: { type: Number },
+    notes: { type: String },
   },
 
   computed: {
-    completed: function() {
+    completed: function () {
       if (this.completedDatetime == null) {
         return false;
       } else {
@@ -58,7 +71,7 @@ export default {
       }
     },
 
-    selected: function() {
+    selected: function () {
       if (this.id == this.selectedTodoId) {
         return true;
       } else {
@@ -66,32 +79,40 @@ export default {
       }
     },
 
-    formattedSnoozeDatetime: function() {
+    formattedSnoozeDatetime: function () {
       return helpers.formatDate(this.snoozeDatetime);
-    }
+    },
+
+    hasNotes: function () {
+      if (this.notes != null && this.notes != "") {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
 
   methods: {
-    toggleCompleted: function() {
+    toggleCompleted: function () {
       var newCompletedDatetime = null;
       if (this.completed == false) {
         newCompletedDatetime = new Date();
       }
       EventBus.$emit("update-todo-by-index", this.listIndex, this.todoIndex, {
-        completedDatetime: newCompletedDatetime
+        completedDatetime: newCompletedDatetime,
       });
     },
 
-    toggleImportant: function() {
+    toggleImportant: function () {
       EventBus.$emit("update-todo-by-index", this.listIndex, this.todoIndex, {
-        important: !this.important
+        important: !this.important,
       });
     },
 
-    select: function() {
+    select: function () {
       EventBus.$emit("select-todo", this.id);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -199,5 +220,11 @@ export default {
   .snoozed-label-text {
     margin: 0 14px 0 4px;
   }
+}
+
+.notes-icon {
+  margin: 0 8px 4px 0;
+  font-size: 20px;
+  color: $subduedColor;
 }
 </style>

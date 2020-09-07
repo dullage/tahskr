@@ -78,6 +78,7 @@
       class="notes"
       id="input-notes"
       @blur="saveNotes"
+      @keyup.ctrl.enter="saveNotes"
     ></textarea>
 
     <!-- Created Date -->
@@ -156,10 +157,13 @@ export default {
     todoId: function () {
       this.init();
     },
+
     snoozeDatetimeInput: function () {
-      EventBus.$emit("update-todo-by-id", this.todoId, {
-        snoozeDatetime: this.snoozeDatetimeInput,
-      });
+      if (this.snoozeDatetimeInput != this.snoozeDatetime) {
+        EventBus.$emit("update-todo-by-id", this.todoId, {
+          snoozeDatetime: this.snoozeDatetimeInput,
+        });
+      }
     },
   },
 
@@ -173,7 +177,8 @@ export default {
       this.notesInput = this.notes;
       this.editSummaryMode = false;
       this.editNotesMode = false;
-      this.snoozeDatetimeInput = this.snoozeDatetime;
+      this.snoozeDatetimeInput =
+        this.snoozeDatetime > new Date() ? this.snoozeDatetime : null; // TODO: This should cause the watch method to fire but doesn't always.
     },
 
     summaryClick: function () {
@@ -244,6 +249,7 @@ export default {
       if (this.snoozeDatetimeInput == null) {
         var tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
         this.snoozeDatetimeInput = tomorrow;
       } else {
         this.snoozeDatetimeInput = null;
@@ -329,6 +335,7 @@ input.summary {
   cursor: text;
   padding: 4px 10px;
   border: solid 2px $bgLightColor;
+  font-size: 14px;
 }
 
 input.summary,
@@ -342,7 +349,6 @@ textarea.notes {
 textarea.notes {
   flex: 1 1 auto;
   resize: none;
-  font-size: 16px;
   outline: none;
   padding: 4px 10px;
   border: solid 2px lighten($bgLightColor, 10%);

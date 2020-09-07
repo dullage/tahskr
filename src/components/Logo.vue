@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
     <div class="title">
-    <img v-if="showLogo" src="favicon.svg" />
+      <img v-if="showLogo" src="favicon.svg" />
       <span>tahskr</span>
       <span class="brand-orange" :class="{ cursor: blink }">_</span>
     </div>
@@ -14,17 +14,17 @@ export default {
   props: {
     showLogo: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showSubtitle: {
       type: Boolean,
-      default: true
+      default: true,
     },
     blink: {
       type: Boolean,
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 </script>
 
@@ -33,6 +33,7 @@ export default {
 
 .logo {
   color: $offWhite;
+  user-select: none;
 
   .brand-orange {
     color: $brandOrange;

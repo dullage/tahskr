@@ -31,11 +31,7 @@
           <input type="password" id="password" v-model="password" placeholder="Password" required />
 
           <div id="remember-me">
-            <check-box
-              class="check-box"
-              :checked="remember"
-              @toggled="toggleRemember"
-            />
+            <check-box class="check-box" :checked="remember" @toggled="toggleRemember" />
             <span @click="toggleRemember">Remember Me</span>
           </div>
 
@@ -47,6 +43,13 @@
         </form>
         <p id="message">{{ message }}</p>
       </div>
+    </div>
+
+    <!-- GitHub Logo -->
+    <div class="github-logo">
+      <a href="https://github.com/Dullage/tahskr">
+        <img src="GitHub-Mark-Light-32px.png" alt="GitHub Logo" />
+      </a>
     </div>
   </div>
 </template>
@@ -63,42 +66,42 @@ export default {
     LinkVariantRemoveIcon,
     LoginVariantIcon,
     CheckBox,
-    Logo
+    Logo,
   },
 
-  data: function() {
+  data: function () {
     return {
       serverAddress: null,
       username: null,
       password: null,
       remember: false,
-      message: null
+      message: null,
     };
   },
 
   methods: {
-    toggleRemember: function() {
+    toggleRemember: function () {
       this.remember = !this.remember;
     },
 
-    clearServerAddress: function() {
+    clearServerAddress: function () {
       localStorage.removeItem("serverAddress");
       this.serverAddress = null;
     },
 
-    submit: function() {
+    submit: function () {
       var parent = this;
       api.defaults.baseURL = this.serverAddress;
 
       api
         .post("/auth", {
           username: this.username,
-          password: this.password
+          password: this.password,
         })
-        .then(function(r) {
+        .then(function (r) {
           parent.$emit("login", parent.serverAddress, r.data, parent.remember);
         })
-        .catch(function(e) {
+        .catch(function (e) {
           if (typeof e.response !== "undefined" && e.response.status == 401) {
             parent.message = "Invalid username or password, please try again.";
           } else {
@@ -106,15 +109,15 @@ export default {
               "Unable to communicate with the tahskr server, please check the 'Server Address' entered.";
           }
         })
-        .finally(function() {
+        .finally(function () {
           parent.password = null;
         });
-    }
+    },
   },
 
-  created: function() {
+  created: function () {
     this.serverAddress = localStorage.getItem("serverAddress");
-  }
+  },
 };
 </script>
 
@@ -202,5 +205,17 @@ input[type="password"] {
   color: $errorRed;
   font-size: 12px;
   text-align: center;
+}
+
+.github-logo {
+  @media #{$desktop} {
+    opacity: 0.2;
+    &:hover {
+      opacity: 1;
+    }
+    transition: opacity 500ms ease;
+  }
+  position: absolute;
+  bottom: 40px;
 }
 </style>

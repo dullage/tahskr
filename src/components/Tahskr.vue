@@ -17,27 +17,27 @@ export default {
   components: {
     CommunicationErrorPage,
     LoginPage,
-    MainAppPage
+    MainAppPage,
   },
 
-  data: function() {
+  data: function () {
     return {
       auth: {
         userId: null,
-        token: null
+        token: null,
       },
-      communicationError: false
+      communicationError: false,
     };
   },
 
   computed: {
-    loggedIn: function() {
+    loggedIn: function () {
       return this.auth.token != null && this.auth.userId != null;
-    }
+    },
   },
 
   methods: {
-    loadSavedAuth: function() {
+    loadSavedAuth: function () {
       var storedServerAddress = localStorage.getItem("serverAddress");
       var storedToken = localStorage.getItem("token");
       var storedUserId = localStorage.getItem("userId");
@@ -49,7 +49,7 @@ export default {
       }
     },
 
-    login: function(serverAddress, token, remember) {
+    login: function (serverAddress, token, remember) {
       this.auth.token = token.token;
       this.auth.userId = token.userId;
       localStorage.setItem("serverAddress", serverAddress);
@@ -60,7 +60,7 @@ export default {
       api.defaults.headers.common["x-token"] = token.token;
     },
 
-    logout: function() {
+    logout: function () {
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
       this.auth.token = null;
@@ -68,19 +68,19 @@ export default {
       delete api.defaults.baseURL;
       delete api.defaults.headers.common["x-token"];
       this.communicationError = false;
-    }
+    },
   },
 
-  created: function() {
+  created: function () {
     this.loadSavedAuth();
 
     var parent = this;
-    EventBus.$on("communication-error", function(val) {
+    EventBus.$on("communication-error", function (val) {
       parent.communicationError = val;
     });
 
     EventBus.$on("logout", this.logout);
-  }
+  },
 };
 </script>
 

@@ -23,18 +23,19 @@ export default {
   components: {
     AlertCircleOutlineIcon,
     LogoutVariantIcon,
-    RefreshIcon
+    RefreshIcon,
   },
 
   methods: {
-    reload: function() {
-      location.reload();s
+    reload: function () {
+      location.reload();
+      s;
     },
 
-    logout: function() {
+    logout: function () {
       EventBus.$emit("logout");
-    }
-  }
+    },
+  },
 };
 </script>
 
