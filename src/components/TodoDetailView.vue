@@ -157,10 +157,13 @@ export default {
     todoId: function () {
       this.init();
     },
+
     snoozeDatetimeInput: function () {
-      EventBus.$emit("update-todo-by-id", this.todoId, {
-        snoozeDatetime: this.snoozeDatetimeInput,
-      });
+      if (this.snoozeDatetimeInput != this.snoozeDatetime) {
+        EventBus.$emit("update-todo-by-id", this.todoId, {
+          snoozeDatetime: this.snoozeDatetimeInput,
+        });
+      }
     },
   },
 
@@ -174,7 +177,8 @@ export default {
       this.notesInput = this.notes;
       this.editSummaryMode = false;
       this.editNotesMode = false;
-      this.snoozeDatetimeInput = this.snoozeDatetime;
+      this.snoozeDatetimeInput =
+        this.snoozeDatetime > new Date() ? this.snoozeDatetime : null; // TODO: This should cause the watch method to fire but doesn't always.
     },
 
     summaryClick: function () {
@@ -245,6 +249,7 @@ export default {
       if (this.snoozeDatetimeInput == null) {
         var tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
         this.snoozeDatetimeInput = tomorrow;
       } else {
         this.snoozeDatetimeInput = null;
