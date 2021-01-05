@@ -23,7 +23,7 @@
   "devDependencies": {
     "@hapi/joi": "^17.1.1",
     "autoprefixer": "^9.8.6",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "copy-webpack-plugin": "^6.0.3",
     "css-loader": "^3.6.0",
     "electron": "^9.2.0",
