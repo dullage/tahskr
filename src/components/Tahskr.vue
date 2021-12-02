@@ -53,6 +53,7 @@ export default {
       this.auth.token = token.token;
       this.auth.userId = token.userId;
       localStorage.setItem("serverAddress", serverAddress);
+      localStorage.setItem("remember", remember);
       if (remember == true) {
         localStorage.setItem("token", token.token);
         localStorage.setItem("userId", token.userId);
