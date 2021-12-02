@@ -117,6 +117,7 @@ export default {
 
   created: function () {
     this.serverAddress = localStorage.getItem("serverAddress");
+    this.remember = localStorage.getItem("remember") == "true";
   },
 };
 </script>
